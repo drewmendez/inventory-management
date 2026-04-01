@@ -1,0 +1,12 @@
+{
+    "name": "api",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "php artisan serve",
+        "artisan": "php artisan",
+        "composer": "composer",
+        "setup": "composer install && cp .env.example .env && php artisan key:generate",
+        "lintfix": "php vendor/bin/pint"
+    }
+}

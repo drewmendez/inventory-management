@@ -1,0 +1,24 @@
+{
+  "name": "inventory-management",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "scripts": {
+    "web": "pnpm --filter web",
+    "api": "pnpm --filter api",
+    "dev": "pnpm -r --parallel --stream dev",
+    "artisan": "pnpm api artisan",
+    "composer": "pnpm api composer",
+    "setup": "pnpm install && pnpm api run setup",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "nano-staged": "^0.9.0"
+  },
+  "nano-staged": {
+    "apps/web/**/*": "pnpm web exec prettier --write --ignore-unknown",
+    "apps/web/**/*.{js,cjs,mjs,ts,jsx,tsx}": "pnpm web exec eslint --fix",
+    "apps/api/**/*": "pnpm api run lintfix"
+  }
+}
