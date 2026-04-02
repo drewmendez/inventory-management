@@ -3,11 +3,10 @@
 namespace App\Http\Resources;
 
 use App\Helpers\DateFormat;
-use App\Helpers\NameFormat;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,12 +17,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_name' => $this->first_name,
-            'middle_name' => $this->middle_name,
-            'last_name' => $this->last_name,
-            'full_name' => NameFormat::fullName($this->first_name, $this->middle_name, $this->last_name),
-            'email' => $this->email,
-            'role' => new RoleResource($this->role),
+            'name' => $this->name,
             'created_at' => DateFormat::normalize($this->created_at),
             'updated_at' => DateFormat::normalize($this->updated_at),
         ];
