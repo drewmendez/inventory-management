@@ -19,6 +19,11 @@ class Item extends Model
         'unit_id',
     ];
 
+    protected $casts = [
+        'quantity' => 'decimal:2',
+        'reorder_level' => 'decimal:2',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
