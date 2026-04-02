@@ -2,20 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\Item;
 use App\Helpers\PaginatorInfo;
+use App\Models\Item;
 
 class ItemService
 {
     private const SEARCHABLE_COLUMNS = [
         'sku',
         'name',
-    ];
-
-    private const FILTERABLE_COLUMNS = [
-        'category_id',
-        'unit_id',
-        'status',
     ];
 
     /**
