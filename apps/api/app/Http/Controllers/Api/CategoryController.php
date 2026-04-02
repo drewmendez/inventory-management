@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\IndexCategoryRequest;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,9 +31,13 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
-        //
+        $category = $this->categoryService->createCategory($request->validated());
+
+        return CategoryResource::make($category)
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -44,9 +51,11 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, Category $category): JsonResponse
     {
-        //
+        $category = $this->categoryService->updateCategory($category, $request->validated());
+
+        return CategoryResource::make($category)->response();
     }
 
     /**

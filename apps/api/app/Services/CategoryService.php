@@ -43,4 +43,22 @@ class CategoryService
             'paginator_info' => PaginatorInfo::from($paginator),
         ];
     }
+
+    public function createCategory(array $data): Category
+    {
+        return Category::query()->create([
+            'name' => $data['name'],
+            'prefix' => $data['prefix'],
+        ]);
+    }
+
+    public function updateCategory(Category $category, array $data): Category
+    {
+        $category->update([
+            'name' => $data['name'],
+            'prefix' => $data['prefix'],
+        ]);
+
+        return $category->fresh();
+    }
 }
