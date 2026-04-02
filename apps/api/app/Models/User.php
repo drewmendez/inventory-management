@@ -34,4 +34,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function isAdmin(): bool
+    {
+        $this->loadMissing('role');
+
+        return $this->role?->name === Role::ADMIN_NAME;
+    }
 }

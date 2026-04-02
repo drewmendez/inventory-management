@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', MeController::class);
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/categories', [CategoryController::class, 'index']);
-    Route::get('/units', [UnitController::class, 'index']);
     Route::get('/items', [ItemController::class, 'index']);
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/inventory-movements', [InventoryMovementController::class, 'index']);
+});
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/units', [UnitController::class, 'index']);
 });

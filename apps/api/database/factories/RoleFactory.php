@@ -21,7 +21,7 @@ class RoleFactory extends Factory
 
     public function admin(): static
     {
-        return $this->state(fn () => ['name' => 'Admin']);
+        return $this->state(fn () => ['name' => Role::ADMIN_NAME]);
     }
 
     public function warehouseStaff(): static
