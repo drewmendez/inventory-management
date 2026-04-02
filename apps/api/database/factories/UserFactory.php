@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,8 +22,8 @@ class UserFactory extends Factory
             'middle_name' => fake()->optional(0.9)->lastName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => 'staff123',
-            'role_id' => 2,
+            'password' => 'password',
+            'role_id' => Role::factory()->warehouseStaff(),
         ];
     }
 }
