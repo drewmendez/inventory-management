@@ -49,4 +49,22 @@ class UserService
             'paginator_info' => PaginatorInfo::from($paginator),
         ];
     }
+
+    public function updateUser(User $user, array $data): User
+    {
+        $payload = [
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'role_id' => $data['role_id'],
+        ];
+
+        if (array_key_exists('middle_name', $data)) {
+            $payload['middle_name'] = $data['middle_name'];
+        }
+
+        $user->update($payload);
+
+        return $user->fresh(['role']);
+    }
 }
