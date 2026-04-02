@@ -43,4 +43,22 @@ class UnitService
             'paginator_info' => PaginatorInfo::from($paginator),
         ];
     }
+
+    public function createUnit(array $data): Unit
+    {
+        return Unit::query()->create([
+            'name' => $data['name'],
+            'symbol' => $data['symbol'],
+        ]);
+    }
+
+    public function updateUnit(Unit $unit, array $data): Unit
+    {
+        $unit->update([
+            'name' => $data['name'],
+            'symbol' => $data['symbol'],
+        ]);
+
+        return $unit->fresh();
+    }
 }

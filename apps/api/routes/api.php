@@ -23,4 +23,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update']);
     Route::patch('/categories/{category}', [CategoryController::class, 'update']);
     Route::get('/units', [UnitController::class, 'index']);
+    Route::post('/units', [UnitController::class, 'store']);
+    Route::put('/units/{unit}', [UnitController::class, 'update']);
+    Route::patch('/units/{unit}', [UnitController::class, 'update']);
 });
