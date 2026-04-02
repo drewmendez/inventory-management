@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 class IndexItemRequest extends FormRequest
 {
     private const SORTABLE_COLUMNS = [
-        'id',
         'sku',
         'name',
         'quantity',

@@ -10,7 +10,6 @@ class IndexTransactionRequest extends FormRequest
     private const SORTABLE_COLUMNS = [
         'reference_number',
         'created_at',
-        'updated_at',
     ];
 
     /**
