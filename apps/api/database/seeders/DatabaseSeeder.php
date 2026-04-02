@@ -14,6 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // TODO: Add database seeders here
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            CategorySeeder::class,
+            UnitSeeder::class,
+            ItemSeeder::class,
+        ]);
     }
 }
