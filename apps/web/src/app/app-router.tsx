@@ -3,7 +3,7 @@ import AuthLayout from '@/app/layouts/auth-layout'
 import MainLayout from '@/app/layouts/main-layout'
 import Dashboard from '@/app/pages/dashboard'
 import Login from '@/app/pages/login'
-import { ManageUsers } from '@/app/pages/manage-users'
+import { ManageUsers } from '@/app/pages/manage-users/manage-users'
 
 const router = createBrowserRouter([
   {

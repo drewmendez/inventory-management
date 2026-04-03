@@ -1,24 +1,30 @@
 import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, Trash } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, Edit } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useDebounce } from '@/hooks/use-debounce'
 import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardFooter } from '../ui/card'
-import { Skeleton } from '../ui/skeleton'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Paginator } from './paginator'
 
 export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TData> }) {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 })
   const [sorting, setSorting] = useState<SortingState>([])
+  const [searchInput, setSearchInput] = useState('')
+  const debouncedSearch = useDebounce(searchInput)
+
   const primarySort = sorting[0]
   const { data, isPending } = dataTable.query({
     page: pagination.pageIndex + 1,
     perPage: pagination.pageSize,
     sortBy: primarySort?.id,
     sortOrder: primarySort ? (primarySort.desc ? 'desc' : 'asc') : undefined,
+    search: debouncedSearch.trim(),
   })
 
   const getColumns = (): ColumnDef<TData>[] => {
@@ -30,9 +36,6 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           <div className="flex items-center justify-center gap-2">
             <Button variant="outline" className="h-8 w-8 p-0">
               <Edit />
-            </Button>
-            <Button variant="destructive" className="h-8 w-8 p-0">
-              <Trash />
             </Button>
           </div>
         )
@@ -69,8 +72,18 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   })
 
   return (
-    <Card className="size-full">
-      <CardContent className="size-full min-h-0">
+    <Card className="size-full gap-3">
+      <CardContent className="flex size-full min-h-0 flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <Input
+            type="search"
+            placeholder="Search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="max-w-sm py-5"
+            aria-label="Search table"
+          />
+        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
