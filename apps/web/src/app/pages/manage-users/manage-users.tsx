@@ -2,6 +2,7 @@ import type { DataTableProps } from '@/types/data-table'
 import type { User } from '@/types/user'
 import { DataTable } from '@/components/data-table'
 import { useGetUsers } from '@/hooks/use-user'
+import RoleFilter from './role-filter'
 
 export function ManageUsers() {
   const dataTable = {
@@ -43,6 +44,9 @@ export function ManageUsers() {
         isSortable: true,
       },
     ],
+    filters: {
+      role_id: RoleFilter,
+    },
   } satisfies DataTableProps<User>
 
   return <DataTable dataTable={dataTable} />

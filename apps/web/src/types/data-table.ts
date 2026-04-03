@@ -1,5 +1,11 @@
 import type { UseQueryResult } from '@tanstack/react-query'
+import type { ComponentType } from 'react'
 import type { PaginatedQueryResponse, QueryParams } from '@/types/api'
+
+export interface DataTableFilterProps {
+  value: string
+  onValueChange: (value: string) => void
+}
 
 interface Column<T> {
   header: string
@@ -19,4 +25,5 @@ export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams>
 export interface DataTableProps<TData, TParams extends QueryParams = QueryParams> {
   columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
+  filters?: Record<string, ComponentType<DataTableFilterProps>>
 }

@@ -7,7 +7,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function buildQueryString({ page = 1, perPage = 25, sortBy, sortOrder, search }: QueryParams) {
+export function buildQueryString({
+  page = 1,
+  perPage = 25,
+  sortBy,
+  sortOrder,
+  search,
+  filters,
+}: QueryParams) {
   const params = new URLSearchParams({
     page: String(page),
     per_page: String(perPage),
@@ -19,6 +26,13 @@ export function buildQueryString({ page = 1, perPage = 25, sortBy, sortOrder, se
   const trimmedSearch = search?.trim()
   if (trimmedSearch) {
     params.set('search', trimmedSearch)
+  }
+  if (filters) {
+    for (const [key, val] of Object.entries(filters)) {
+      if (val !== '') {
+        params.set(key, val)
+      }
+    }
   }
   return params.toString()
 }

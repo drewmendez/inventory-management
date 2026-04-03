@@ -2,7 +2,7 @@ import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/r
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { ChevronDown, ChevronsUpDown, ChevronUp, Edit } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -16,7 +16,23 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 })
   const [sorting, setSorting] = useState<SortingState>([])
   const [searchInput, setSearchInput] = useState('')
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const debouncedSearch = useDebounce(searchInput)
+
+  const filters = useMemo(() => {
+    const out: Record<string, string> = {}
+    for (const [key, val] of Object.entries(filterValues)) {
+      if (val !== '') {
+        out[key] = val
+      }
+    }
+    return Object.keys(out).length > 0 ? out : undefined
+  }, [filterValues])
+
+  const setFilterValue = (key: string, value: string) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }))
+    setPagination((p) => ({ ...p, pageIndex: 0 }))
+  }
 
   const primarySort = sorting[0]
   const { data, isPending } = dataTable.query({
@@ -25,6 +41,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     sortBy: primarySort?.id,
     sortOrder: primarySort ? (primarySort.desc ? 'desc' : 'asc') : undefined,
     search: debouncedSearch.trim(),
+    filters,
   })
 
   const getColumns = (): ColumnDef<TData>[] => {
@@ -74,7 +91,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   return (
     <Card className="size-full gap-3">
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <Input
             type="search"
             placeholder="Search"
@@ -83,6 +100,14 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             className="max-w-sm py-5"
             aria-label="Search table"
           />
+          {dataTable.filters &&
+            Object.entries(dataTable.filters).map(([key, Filter]) => (
+              <Filter
+                key={key}
+                value={filterValues[key] ?? ''}
+                onValueChange={(value) => setFilterValue(key, value)}
+              />
+            ))}
         </div>
         <Table>
           <TableHeader>
