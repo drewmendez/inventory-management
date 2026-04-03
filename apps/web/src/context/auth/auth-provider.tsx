@@ -3,6 +3,7 @@ import { AuthContext } from './auth-context'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { data: user } = useGetMe()
+
   const isAdmin = user?.role.name === 'Admin'
   const isAuthenticated = Boolean(user)
 
@@ -11,8 +12,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isAdmin,
     isAuthenticated,
   }
-
-  console.log(value)
 
   return <AuthContext value={value}>{children}</AuthContext>
 }
