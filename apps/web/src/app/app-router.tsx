@@ -6,6 +6,7 @@ import { InventoryLogs } from '@/app/pages/inventory-logs'
 import { ItemInventories } from '@/app/pages/item-inventories'
 import Login from '@/app/pages/login'
 import { ManageCategories } from '@/app/pages/manage-categories'
+import { ManageUnits } from '@/app/pages/manage-units'
 import { ManageUsers } from '@/app/pages/manage-users'
 import { Transactions } from '@/app/pages/transactions'
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
           {
             path: '/dashboard/manage-categories',
             element: <ManageCategories />,
+          },
+          {
+            path: '/dashboard/manage-units',
+            element: <ManageUnits />,
           },
           {
             path: '/dashboard/manage-users',

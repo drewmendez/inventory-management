@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse } from '@/types/api'
-import type { Unit } from '@/types/unit'
+import type { Unit, UnitPayload } from '@/types/unit'
 import { api } from '@/lib/api'
 
 export const getUnits = async (queryString: string) => {
@@ -14,4 +14,34 @@ export const getUnits = async (queryString: string) => {
   }
 
   return jsonData
+}
+
+export const createUnit = async (payload: UnitPayload) => {
+  const response = await api('/api/units', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+
+  const jsonData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(jsonData.message ?? response.statusText)
+  }
+
+  return jsonData.data as Unit
+}
+
+export const updateUnit = async (unitId: number, payload: UnitPayload) => {
+  const response = await api(`/api/units/${unitId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+
+  const jsonData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(jsonData.message ?? response.statusText)
+  }
+
+  return jsonData.data as Unit
 }
