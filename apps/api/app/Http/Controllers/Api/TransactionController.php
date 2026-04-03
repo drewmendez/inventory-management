@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transaction\IndexTransactionRequest;
+use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +29,13 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request): JsonResponse
     {
-        //
+        $transaction = $this->transactionService->createTransaction($request->validated(), $request->user());
+
+        return TransactionResource::make($transaction)
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

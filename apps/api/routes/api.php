@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/items', [ItemController::class, 'store']);
     Route::patch('/items/{item}', [ItemController::class, 'update']);
     Route::get('/transactions', [TransactionController::class, 'index']);
+    Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/inventory-movements', [InventoryMovementController::class, 'index']);
 });
 
