@@ -18,6 +18,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [searchInput, setSearchInput] = useState('')
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [viewRow, setViewRow] = useState<TData | null>(null)
+  const [updateRow, setUpdateRow] = useState<TData | null>(null)
   const debouncedSearch = useDebounce(searchInput)
 
   const filters = useMemo(() => {
@@ -46,6 +47,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   })
 
   const ViewCrud = dataTable.crud?.view
+  const UpdateCrud = dataTable.crud?.update
 
   const getColumns = (): ColumnDef<TData>[] => {
     const actionsColumn: ColumnDef<TData> = {
@@ -65,9 +67,17 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                 <EyeIcon />
               </Button>
             )}
-            <Button variant="outline" className="h-8 w-8 p-0" aria-label="Edit row">
-              <Edit />
-            </Button>
+            {UpdateCrud && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-8 w-8 p-0"
+                aria-label="Update row"
+                onClick={() => setUpdateRow(row.original)}
+              >
+                <Edit />
+              </Button>
+            )}
           </div>
         )
       },
@@ -191,6 +201,19 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           onOpenChange={(open) => {
             if (!open) {
               setViewRow(null)
+            }
+          }}
+        />
+      )}
+
+      {UpdateCrud && updateRow !== null && (
+        <UpdateCrud
+          key={String((updateRow as { id: string | number }).id)}
+          row={updateRow}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setUpdateRow(null)
             }
           }}
         />

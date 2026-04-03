@@ -1,7 +1,8 @@
 import type { QueryParams } from '@/types/api'
-import { useQuery } from '@tanstack/react-query'
+import type { UpdateUserPayload } from '@/types/user'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { getUsers } from '@/services/user'
+import { getUsers, updateUser } from '@/services/user'
 
 export const useGetUsers = (params: QueryParams) => {
   const queryString = buildQueryString(params)
@@ -18,5 +19,16 @@ export const useGetUsers = (params: QueryParams) => {
       filtersKey,
     ],
     queryFn: () => getUsers(queryString),
+  })
+}
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: number; data: UpdateUserPayload }) => updateUser(userId, data),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
   })
 }
