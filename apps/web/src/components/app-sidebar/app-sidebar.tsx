@@ -33,7 +33,7 @@ const data = {
     },
     {
       title: 'Item Inventories',
-      url: '/dashboard/items',
+      url: '/dashboard/item-inventories',
       icon: <BoxIcon />,
     },
     {

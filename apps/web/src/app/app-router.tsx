@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
+import AuthLayout from '@/app/layouts/auth-layout'
 import MainLayout from '@/app/layouts/main-layout'
 import Dashboard from '@/app/pages/dashboard'
 import Login from '@/app/pages/login'
-import AuthLayout from './layouts/auth-layout'
+import { ManageUsers } from '@/app/pages/manage-users'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
           {
             path: '/dashboard',
             element: <Dashboard />,
+          },
+          {
+            path: '/dashboard/manage-users',
+            element: <ManageUsers />,
           },
         ],
       },
