@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', MeController::class);
     Route::get('/items', [ItemController::class, 'index']);
+    Route::post('/items', [ItemController::class, 'store']);
+    Route::patch('/items/{item}', [ItemController::class, 'update']);
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/inventory-movements', [InventoryMovementController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::post('/items', [ItemController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{user}', [UserController::class, 'update']);
     Route::get('/categories', [CategoryController::class, 'index']);

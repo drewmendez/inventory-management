@@ -79,6 +79,20 @@ class ItemService
         });
     }
 
+    public function updateItem(Item $item, array $data): Item
+    {
+        $payload = array_intersect_key(
+            $data,
+            array_flip(['name', 'quantity', 'reorder_level', 'category_id', 'unit_id'])
+        );
+
+        if ($payload !== []) {
+            $item->update($payload);
+        }
+
+        return $item->fresh(['category', 'unit']);
+    }
+
     private function generateSkuForCategory(Category $category): string
     {
         $prefix = $category->prefix;

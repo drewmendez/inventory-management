@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Item\IndexItemRequest;
 use App\Http\Requests\Item\StoreItemRequest;
+use App\Http\Requests\Item\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Services\ItemService;
 use Illuminate\Http\JsonResponse;
@@ -50,9 +51,12 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateItemRequest $request, \App\Models\Item $item): JsonResponse
     {
-        //
+        $item = $this->itemService->updateItem($item, $request->validated());
+        $item->load(['category', 'unit']);
+
+        return ItemResource::make($item)->response();
     }
 
     /**
