@@ -35,10 +35,12 @@ export function ManageUsers() {
       {
         header: 'Created At',
         accessorKey: 'created_at',
+        isSortable: true,
       },
       {
         header: 'Updated At',
         accessorKey: 'updated_at',
+        isSortable: true,
       },
     ],
   } satisfies DataTableProps<User>

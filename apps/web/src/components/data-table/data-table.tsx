@@ -77,9 +77,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
               <TableRow key={headerGroup.id} className="sticky top-0 z-10">
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    align="center"
                     key={header.id}
-                    className={cn('bg-primary py-2 text-primary-foreground', {
+                    className={cn('bg-primary px-6 py-2 text-primary-foreground', {
                       'sticky right-0 min-w-35 text-center': header.id === 'actions',
                     })}
                   >
@@ -109,7 +108,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={cn('bg-card', {
+                      className={cn('bg-card px-6', {
                         'sticky right-0': cell.column.id === 'actions',
                       })}
                     >
