@@ -1,7 +1,7 @@
 import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { ChevronDown, ChevronsUpDown, ChevronUp, Edit } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
@@ -17,6 +17,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [sorting, setSorting] = useState<SortingState>([])
   const [searchInput, setSearchInput] = useState('')
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
+  const [viewRow, setViewRow] = useState<TData | null>(null)
   const debouncedSearch = useDebounce(searchInput)
 
   const filters = useMemo(() => {
@@ -44,14 +45,27 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     filters,
   })
 
+  const ViewCrud = dataTable.crud?.view
+
   const getColumns = (): ColumnDef<TData>[] => {
     const actionsColumn: ColumnDef<TData> = {
       id: 'actions',
       header: 'Actions',
-      cell: () => {
+      cell: ({ row }) => {
         return (
           <div className="flex items-center justify-center gap-2">
-            <Button variant="outline" className="h-8 w-8 p-0">
+            {ViewCrud && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-8 w-8 p-0"
+                aria-label="View row"
+                onClick={() => setViewRow(row.original)}
+              >
+                <EyeIcon />
+              </Button>
+            )}
+            <Button variant="outline" className="h-8 w-8 p-0" aria-label="Edit row">
               <Edit />
             </Button>
           </div>
@@ -169,6 +183,18 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
       <CardFooter className="flex items-center justify-end gap-2">
         <Paginator table={table} />
       </CardFooter>
+
+      {ViewCrud && viewRow !== null && (
+        <ViewCrud
+          row={viewRow}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setViewRow(null)
+            }
+          }}
+        />
+      )}
     </Card>
   )
 }

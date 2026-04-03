@@ -7,6 +7,12 @@ export interface DataTableFilterProps {
   onValueChange: (value: string) => void
 }
 
+export interface DataTableCrudProps<TData = unknown> {
+  row: TData
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
 interface Column<T> {
   header: string
   accessorKey: string
@@ -26,4 +32,9 @@ export interface DataTableProps<TData, TParams extends QueryParams = QueryParams
   columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
   filters?: Record<string, ComponentType<DataTableFilterProps>>
+  crud?: {
+    view?: ComponentType<DataTableCrudProps<TData>>
+    create?: ComponentType<DataTableCrudProps<TData>>
+    update?: ComponentType<DataTableCrudProps<TData>>
+  }
 }

@@ -3,6 +3,7 @@ import type { User } from '@/types/user'
 import { DataTable } from '@/components/data-table'
 import { useGetUsers } from '@/hooks/use-user'
 import RoleFilter from './role-filter'
+import ViewUser from './view-user'
 
 export function ManageUsers() {
   const dataTable = {
@@ -46,6 +47,9 @@ export function ManageUsers() {
     ],
     filters: {
       role_id: RoleFilter,
+    },
+    crud: {
+      view: ViewUser,
     },
   } satisfies DataTableProps<User>
 
