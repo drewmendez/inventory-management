@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Item\IndexItemRequest;
+use App\Http\Requests\Item\StoreItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Services\ItemService;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +29,14 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreItemRequest $request): JsonResponse
     {
-        //
+        $item = $this->itemService->createItem($request->validated());
+        $item->load(['category', 'unit']);
+
+        return ItemResource::make($item)
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
