@@ -1,5 +1,5 @@
 import type { DataTableRowModalProps } from '@/types/data-table'
-import type { User } from '@/types/user'
+import type { Item } from '@/types/item'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 function Field({ label, value }: { label: string; value: string }) {
@@ -11,20 +11,20 @@ function Field({ label, value }: { label: string; value: string }) {
   )
 }
 
-export default function ViewUser({ row, open, onOpenChange }: DataTableRowModalProps<User>) {
+export default function ViewItem({ row, open, onOpenChange }: DataTableRowModalProps<Item>) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{row.full_name}</DialogTitle>
-          <DialogDescription>User profile details</DialogDescription>
+          <DialogTitle>{row.name}</DialogTitle>
+          <DialogDescription>SKU {row.sku}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
-          <Field label="Email" value={row.email} />
-          <Field label="First name" value={row.first_name} />
-          <Field label="Middle name" value={row.middle_name ?? '—'} />
-          <Field label="Last name" value={row.last_name} />
-          <Field label="Role" value={row.role.name} />
+          <Field label="Quantity" value={row.quantity} />
+          <Field label="Reorder level" value={row.reorder_level} />
+          <Field label="Status" value={row.status} />
+          <Field label="Category" value={row.category.name} />
+          <Field label="Unit" value={`${row.unit.name} (${row.unit.symbol})`} />
           <Field label="Created" value={row.created_at} />
           <Field label="Updated" value={row.updated_at} />
         </div>

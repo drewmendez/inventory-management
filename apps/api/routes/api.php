@@ -17,15 +17,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/inventory-movements', [InventoryMovementController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/units', [UnitController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{user}', [UserController::class, 'update']);
-    Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::patch('/categories/{category}', [CategoryController::class, 'update']);
-    Route::get('/units', [UnitController::class, 'index']);
     Route::post('/units', [UnitController::class, 'store']);
     Route::patch('/units/{unit}', [UnitController::class, 'update']);
 });

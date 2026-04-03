@@ -1,7 +1,7 @@
 import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
@@ -19,6 +19,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [viewRow, setViewRow] = useState<TData | null>(null)
   const [updateRow, setUpdateRow] = useState<TData | null>(null)
+  const [createOpen, setCreateOpen] = useState(false)
   const debouncedSearch = useDebounce(searchInput)
 
   const filters = useMemo(() => {
@@ -47,6 +48,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   })
 
   const ViewCrud = dataTable.crud?.view
+  const CreateCrud = dataTable.crud?.create
   const UpdateCrud = dataTable.crud?.update
 
   const getColumns = (): ColumnDef<TData>[] => {
@@ -115,13 +117,13 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   return (
     <Card className="size-full gap-3">
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
-        <div className="flex items-center gap-2">
+        <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
           <Input
             type="search"
             placeholder="Search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="max-w-sm py-5"
+            className="max-w-sm min-w-0 flex-1 py-5 sm:flex-none"
             aria-label="Search table"
           />
           {dataTable.filters &&
@@ -132,6 +134,16 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                 onValueChange={(value) => setFilterValue(key, value)}
               />
             ))}
+          {CreateCrud && (
+            <Button
+              type="button"
+              className="ml-auto inline-flex shrink-0 items-center gap-2 py-5"
+              onClick={() => setCreateOpen(true)}
+            >
+              <PlusIcon className="size-4" />
+              {dataTable.createActionLabel ?? 'Add'}
+            </Button>
+          )}
         </div>
         <Table>
           <TableHeader>
@@ -218,6 +230,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           }}
         />
       )}
+
+      {CreateCrud && <CreateCrud open={createOpen} onOpenChange={setCreateOpen} />}
     </Card>
   )
 }

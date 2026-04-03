@@ -7,10 +7,13 @@ export interface DataTableFilterProps {
   onValueChange: (value: string) => void
 }
 
-export interface DataTableCrudProps<TData = unknown> {
-  row: TData
+export interface DataTableModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+}
+
+export interface DataTableRowModalProps<TData = unknown> extends DataTableModalProps {
+  row: TData
 }
 
 interface Column<T> {
@@ -20,10 +23,6 @@ interface Column<T> {
   isSortable?: boolean
 }
 
-/**
- * A TanStack Query hook used to load table data (e.g. `useGetUsers`).
- * Pass the function reference, not its return value.
- */
 export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams> = (
   params: TParams,
 ) => UseQueryResult<TData, Error>
@@ -31,10 +30,11 @@ export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams>
 export interface DataTableProps<TData, TParams extends QueryParams = QueryParams> {
   columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
+  createActionLabel?: string
   filters?: Record<string, ComponentType<DataTableFilterProps>>
   crud?: {
-    view?: ComponentType<DataTableCrudProps<TData>>
-    create?: ComponentType<DataTableCrudProps<TData>>
-    update?: ComponentType<DataTableCrudProps<TData>>
+    view?: ComponentType<DataTableRowModalProps<TData>>
+    create?: ComponentType<DataTableModalProps>
+    update?: ComponentType<DataTableRowModalProps<TData>>
   }
 }

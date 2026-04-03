@@ -1,5 +1,5 @@
 import type { Resolver } from 'react-hook-form'
-import type { DataTableCrudProps } from '@/types/data-table'
+import type { DataTableRowModalProps } from '@/types/data-table'
 import type { UpdateUserFormData, UpdateUserPayload, User } from '@/types/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
@@ -21,7 +21,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useUpdateUser } from '@/hooks/use-user'
 import { UpdateUserSchema, USER_ROLE_OPTIONS } from '@/types/user'
 
-export default function UpdateUser({ row, open, onOpenChange }: DataTableCrudProps<User>) {
+export default function UpdateUser({ row, open, onOpenChange }: DataTableRowModalProps<User>) {
   const { mutate, isPending, error, reset: resetMutation } = useUpdateUser()
 
   const { control, handleSubmit } = useForm<UpdateUserFormData>({
