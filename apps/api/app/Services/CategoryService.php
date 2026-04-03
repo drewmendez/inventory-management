@@ -54,10 +54,11 @@ class CategoryService
 
     public function updateCategory(Category $category, array $data): Category
     {
-        $category->update([
-            'name' => $data['name'],
-            'prefix' => $data['prefix'],
-        ]);
+        $payload = array_intersect_key($data, array_flip(['name', 'prefix']));
+
+        if ($payload !== []) {
+            $category->update($payload);
+        }
 
         return $category->fresh();
     }

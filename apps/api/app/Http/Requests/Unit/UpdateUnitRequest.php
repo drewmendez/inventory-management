@@ -23,8 +23,8 @@ class UpdateUnitRequest extends FormRequest
         $unit = $this->route('unit');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'symbol' => ['required', 'string', 'max:255', Rule::unique('units', 'symbol')->ignore($unit)],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'symbol' => ['sometimes', 'required', 'string', 'max:255', Rule::unique('units', 'symbol')->ignore($unit)],
         ];
     }
 }

@@ -54,10 +54,11 @@ class UnitService
 
     public function updateUnit(Unit $unit, array $data): Unit
     {
-        $unit->update([
-            'name' => $data['name'],
-            'symbol' => $data['symbol'],
-        ]);
+        $payload = array_intersect_key($data, array_flip(['name', 'symbol']));
+
+        if ($payload !== []) {
+            $unit->update($payload);
+        }
 
         return $unit->fresh();
     }

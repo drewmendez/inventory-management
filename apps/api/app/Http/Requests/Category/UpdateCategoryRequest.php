@@ -32,8 +32,9 @@ class UpdateCategoryRequest extends FormRequest
         $category = $this->route('category');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
             'prefix' => [
+                'sometimes',
                 'required',
                 'string',
                 'size:3',

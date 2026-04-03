@@ -52,18 +52,14 @@ class UserService
 
     public function updateUser(User $user, array $data): User
     {
-        $payload = [
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'role_id' => $data['role_id'],
-        ];
+        $payload = array_intersect_key(
+            $data,
+            array_flip(['first_name', 'middle_name', 'last_name', 'email', 'role_id'])
+        );
 
-        if (array_key_exists('middle_name', $data)) {
-            $payload['middle_name'] = $data['middle_name'];
+        if ($payload !== []) {
+            $user->update($payload);
         }
-
-        $user->update($payload);
 
         return $user->fresh(['role']);
     }
