@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
-import { login } from '@/services/auth'
+import { getMe, login, logout } from '@/services/auth'
 
 export const useLogin = () => {
   const navigate = useNavigate()
@@ -10,5 +10,22 @@ export const useLogin = () => {
     onSuccess: () => {
       navigate('/dashboard')
     },
+  })
+}
+export const useLogout = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      navigate('/login')
+    },
+  })
+}
+
+export const useGetMe = () => {
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: getMe,
   })
 }
