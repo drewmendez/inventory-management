@@ -22,7 +22,7 @@ export default function StatusFilter({ value, onValueChange }: DataTableFilterPr
     <Combobox
       items={statuses}
       value={selected}
-      onValueChange={(v) => onValueChange(v?.id ?? '')}
+      onValueChange={(v) => onValueChange(v?.id ?? '', v?.name)}
       itemToStringLabel={(s) => s.name}
     >
       <ComboboxInput placeholder="Stock status" className="py-5" showClear />

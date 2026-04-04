@@ -4,7 +4,8 @@ import type { PaginatedQueryResponse, QueryParams } from '@/types/api'
 
 export interface DataTableFilterProps {
   value: string
-  onValueChange: (value: string) => void
+  /** `selectionLabel` is the human-readable chip text (e.g. category name). Omit when clearing. */
+  onValueChange: (value: string, selectionLabel?: string) => void
 }
 
 export interface DataTableModalProps {

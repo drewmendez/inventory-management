@@ -23,7 +23,7 @@ export default function UnitFilter({ value, onValueChange }: DataTableFilterProp
     <Combobox
       items={units}
       value={selected}
-      onValueChange={(v) => onValueChange(v ? String(v.id) : '')}
+      onValueChange={(v) => onValueChange(v ? String(v.id) : '', v?.name)}
       itemToStringLabel={(u) => `${u.name} (${u.symbol})`}
     >
       <ComboboxInput placeholder="Unit" className="py-5" showClear />

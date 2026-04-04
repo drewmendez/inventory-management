@@ -22,7 +22,7 @@ export default function TypeFilter({ value, onValueChange }: DataTableFilterProp
     <Combobox
       items={types}
       value={selected}
-      onValueChange={(v) => onValueChange(v?.id ?? '')}
+      onValueChange={(v) => onValueChange(v?.id ?? '', v?.name)}
       itemToStringLabel={(t) => t.name}
     >
       <ComboboxInput placeholder="Transaction type" className="py-5" showClear />

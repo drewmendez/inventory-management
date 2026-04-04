@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-export function Paginator<TData>({ table }: { table: Table<TData> }) {
+export default function Paginator<TData>({ table }: { table: Table<TData> }) {
   const pageSize = table.getState().pagination.pageSize
 
   return (

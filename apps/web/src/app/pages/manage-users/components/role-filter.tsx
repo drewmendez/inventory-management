@@ -22,7 +22,7 @@ export default function RoleFilter({ value, onValueChange }: DataTableFilterProp
     <Combobox
       items={roles}
       value={selected}
-      onValueChange={(v) => onValueChange(v ? String(v.id) : '')}
+      onValueChange={(v) => onValueChange(v ? String(v.id) : '', v?.name)}
       itemToStringLabel={(role) => role.name}
     >
       <ComboboxInput placeholder="Select a role" className="py-5" showClear />

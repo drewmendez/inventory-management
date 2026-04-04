@@ -2,40 +2,23 @@ import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/r
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useDebounce } from '@/hooks/use-debounce'
 import { cn } from '@/lib/utils'
-import { Paginator } from './paginator'
+import Paginator from './paginator'
+import SearchFilters from './search-filters'
 
 export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TData> }) {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 })
   const [sorting, setSorting] = useState<SortingState>([])
-  const [searchInput, setSearchInput] = useState('')
-  const [filterValues, setFilterValues] = useState<Record<string, string>>({})
+  const [searchQuery, setSearchQuery] = useState('')
+  const [appliedFilters, setAppliedFilters] = useState<Record<string, string> | undefined>(undefined)
   const [viewRow, setViewRow] = useState<TData | null>(null)
   const [updateRow, setUpdateRow] = useState<TData | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
-  const debouncedSearch = useDebounce(searchInput)
-
-  const filters = useMemo(() => {
-    const out: Record<string, string> = {}
-    for (const [key, val] of Object.entries(filterValues)) {
-      if (val !== '') {
-        out[key] = val
-      }
-    }
-    return Object.keys(out).length > 0 ? out : undefined
-  }, [filterValues])
-
-  const setFilterValue = (key: string, value: string) => {
-    setFilterValues((prev) => ({ ...prev, [key]: value }))
-    setPagination((p) => ({ ...p, pageIndex: 0 }))
-  }
 
   const primarySort = sorting[0]
   const { data, isPending } = dataTable.query({
@@ -43,8 +26,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     perPage: pagination.pageSize,
     sortBy: primarySort?.id,
     sortOrder: primarySort ? (primarySort.desc ? 'desc' : 'asc') : undefined,
-    search: debouncedSearch.trim(),
-    filters,
+    search: searchQuery,
+    filters: appliedFilters,
   })
 
   const ViewCrud = dataTable.crud?.view
@@ -63,7 +46,6 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                 type="button"
                 variant="outline"
                 className="h-8 w-8 p-0"
-                aria-label="View row"
                 onClick={() => setViewRow(row.original)}
               >
                 <EyeIcon />
@@ -74,7 +56,6 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                 type="button"
                 variant="outline"
                 className="h-8 w-8 p-0"
-                aria-label="Update row"
                 onClick={() => setUpdateRow(row.original)}
               >
                 <Edit />
@@ -118,22 +99,12 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     <Card className="size-full gap-3">
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
-          <Input
-            type="search"
-            placeholder="Search"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="max-w-sm min-w-0 flex-1 py-5 sm:flex-none"
-            aria-label="Search table"
+          <SearchFilters
+            filters={dataTable.filters}
+            onDebouncedSearchChange={setSearchQuery}
+            onFiltersChange={setAppliedFilters}
+            onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
           />
-          {dataTable.filters &&
-            Object.entries(dataTable.filters).map(([key, Filter]) => (
-              <Filter
-                key={key}
-                value={filterValues[key] ?? ''}
-                onValueChange={(value) => setFilterValue(key, value)}
-              />
-            ))}
           {CreateCrud && (
             <Button
               type="button"

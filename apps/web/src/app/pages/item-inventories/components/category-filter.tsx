@@ -23,7 +23,7 @@ export default function CategoryFilter({ value, onValueChange }: DataTableFilter
     <Combobox
       items={categories}
       value={selected}
-      onValueChange={(v) => onValueChange(v ? String(v.id) : '')}
+      onValueChange={(v) => onValueChange(v ? String(v.id) : '', v?.name)}
       itemToStringLabel={(c) => c.name}
     >
       <ComboboxInput placeholder="Category" className="py-5" showClear />
