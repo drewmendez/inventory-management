@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse } from '@/types/api'
-import type { Transaction } from '@/types/transaction'
+import type { StoreTransactionPayload, Transaction } from '@/types/transaction'
 import { api } from '@/lib/api'
 
 export const getTransactions = async (queryString: string) => {
@@ -14,4 +14,30 @@ export const getTransactions = async (queryString: string) => {
   }
 
   return jsonData
+}
+
+export const createTransaction = async (payload: StoreTransactionPayload) => {
+  const response = await api('/api/transactions', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+
+  const jsonData = await response.json()
+
+  if (!response.ok) {
+    let message = response.statusText
+    if (typeof jsonData.message === 'string') {
+      message = jsonData.message
+    } else if (jsonData.errors && typeof jsonData.errors === 'object') {
+      const parts = Object.values(jsonData.errors as Record<string, string[]>)
+        .flat()
+        .filter(Boolean)
+      if (parts.length > 0) {
+        message = parts.join(' ')
+      }
+    }
+    throw new Error(message)
+  }
+
+  return jsonData.data as Transaction
 }

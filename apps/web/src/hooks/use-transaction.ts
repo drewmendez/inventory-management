@@ -1,7 +1,8 @@
 import type { QueryParams } from '@/types/api'
-import { useQuery } from '@tanstack/react-query'
+import type { StoreTransactionPayload } from '@/types/transaction'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { getTransactions } from '@/services/transaction'
+import { createTransaction, getTransactions } from '@/services/transaction'
 
 export const useGetTransactions = (params: QueryParams) => {
   const queryString = buildQueryString(params)
@@ -18,5 +19,18 @@ export const useGetTransactions = (params: QueryParams) => {
       filtersKey,
     ],
     queryFn: () => getTransactions(queryString),
+  })
+}
+
+export const useCreateTransaction = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: StoreTransactionPayload) => createTransaction(data),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      void queryClient.invalidateQueries({ queryKey: ['items'] })
+      void queryClient.invalidateQueries({ queryKey: ['inventory-movements'] })
+    },
   })
 }
