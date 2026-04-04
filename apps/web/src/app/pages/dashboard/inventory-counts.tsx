@@ -4,11 +4,11 @@ import CategoryFilter from '@/app/pages/item-inventories/category-filter'
 import StatusFilter from '@/app/pages/item-inventories/status-filter'
 import UnitFilter from '@/app/pages/item-inventories/unit-filter'
 import { DataTable } from '@/components/data-table'
-import { useGetItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/use-item'
 
 export function InventoryCounts() {
   const dataTable = {
-    query: useGetItems,
+    query: useGetPaginatedItems,
     createActionLabel: 'Add item',
     columns: [
       {

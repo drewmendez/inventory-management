@@ -1,14 +1,14 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Transaction } from '@/types/transaction'
 import { DataTable } from '@/components/data-table'
-import { useGetTransactions } from '@/hooks/use-transaction'
+import { useGetPaginatedTransactions } from '@/hooks/use-transaction'
 import CreateTransaction from './create-transaction'
 import TypeFilter from './type-filter'
 import ViewTransaction from './view-transaction'
 
 export function Transactions() {
   const dataTable = {
-    query: useGetTransactions,
+    query: useGetPaginatedTransactions,
     createActionLabel: 'Add transaction',
     columns: [
       {

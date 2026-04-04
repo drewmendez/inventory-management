@@ -2,15 +2,27 @@ import type { QueryParams } from '@/types/api'
 import type { UnitPayload } from '@/types/unit'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { createUnit, getUnits, updateUnit } from '@/services/unit'
+import { createUnit, getPaginatedUnits, getUnits, updateUnit } from '@/services/unit'
 
-export const useGetUnits = (params: QueryParams) => {
+export const useGetUnits = (params: QueryParams = {}) => {
+  const queryString = buildQueryString(params)
+  const filtersKey = params.filters ? JSON.stringify(params.filters) : null
+
+  return useQuery({
+    queryKey: ['units', 'list', params.sortBy, params.sortOrder, params.search, filtersKey],
+    queryFn: () => getUnits(queryString),
+    staleTime: 60_000,
+  })
+}
+
+export const useGetPaginatedUnits = (params: QueryParams) => {
   const queryString = buildQueryString(params)
   const filtersKey = params.filters ? JSON.stringify(params.filters) : null
 
   return useQuery({
     queryKey: [
       'units',
+      'paginated',
       params.page,
       params.perPage,
       params.sortBy,
@@ -18,7 +30,7 @@ export const useGetUnits = (params: QueryParams) => {
       params.search,
       filtersKey,
     ],
-    queryFn: () => getUnits(queryString),
+    queryFn: () => getPaginatedUnits(queryString),
   })
 }
 

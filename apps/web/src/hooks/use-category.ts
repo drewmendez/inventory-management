@@ -2,15 +2,27 @@ import type { QueryParams } from '@/types/api'
 import type { CategoryPayload } from '@/types/category'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { createCategory, getCategories, updateCategory } from '@/services/category'
+import { createCategory, getCategories, getPaginatedCategories, updateCategory } from '@/services/category'
 
-export const useGetCategories = (params: QueryParams) => {
+export const useGetCategories = (params: QueryParams = {}) => {
+  const queryString = buildQueryString(params)
+  const filtersKey = params.filters ? JSON.stringify(params.filters) : null
+
+  return useQuery({
+    queryKey: ['categories', 'list', params.sortBy, params.sortOrder, params.search, filtersKey],
+    queryFn: () => getCategories(queryString),
+    staleTime: 60_000,
+  })
+}
+
+export const useGetPaginatedCategories = (params: QueryParams) => {
   const queryString = buildQueryString(params)
   const filtersKey = params.filters ? JSON.stringify(params.filters) : null
 
   return useQuery({
     queryKey: [
       'categories',
+      'paginated',
       params.page,
       params.perPage,
       params.sortBy,
@@ -18,7 +30,7 @@ export const useGetCategories = (params: QueryParams) => {
       params.search,
       filtersKey,
     ],
-    queryFn: () => getCategories(queryString),
+    queryFn: () => getPaginatedCategories(queryString),
   })
 }
 

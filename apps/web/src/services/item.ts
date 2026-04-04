@@ -1,8 +1,8 @@
-import type { PaginatedQueryResponse } from '@/types/api'
+import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
 import type { CreateItemPayload, Item, UpdateItemPayload } from '@/types/item'
 import { api } from '@/lib/api'
 
-export const getItems = async (queryString: string) => {
+export const getPaginatedItems = async (queryString: string) => {
   const response = await api(`/api/items?${queryString}`, {
     method: 'GET',
   })
@@ -16,10 +16,18 @@ export const getItems = async (queryString: string) => {
   return jsonData
 }
 
-export const getItemsTotalCount = async () => {
-  const params = new URLSearchParams({ page: '1', per_page: '10' })
-  const { paginator_info } = await getItems(params.toString())
-  return paginator_info.total
+export const getItems = async (queryString: string) => {
+  const response = await api(`/api/items?${queryString}`, {
+    method: 'GET',
+  })
+
+  const jsonData: QueryResponse<Item[]> = await response.json()
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  return jsonData
 }
 
 export const createItem = async (payload: CreateItemPayload) => {

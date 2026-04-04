@@ -29,7 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Spinner } from '@/components/ui/spinner'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
-import { useItemsPicker } from '@/hooks/use-items-picker'
+import { useGetItems } from '@/hooks/use-item'
 import { useCreateTransaction } from '@/hooks/use-transaction'
 import { StoreTransactionSchema } from '@/types/transaction'
 
@@ -40,7 +40,7 @@ const defaultLine = (): StoreTransactionFormInput['transaction_items'][number] =
 
 export default function CreateTransaction({ open, onOpenChange }: DataTableModalProps) {
   const { mutate, isPending, error, reset: resetMutation } = useCreateTransaction()
-  const { data: itemsResult, isPending: itemsPending } = useItemsPicker()
+  const { data: itemsResult, isPending: itemsPending } = useGetItems()
   const items = itemsResult?.data ?? []
 
   const { control, handleSubmit, reset } = useForm<

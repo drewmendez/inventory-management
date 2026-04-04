@@ -8,10 +8,10 @@ import {
   ComboboxList,
 } from '@/components/ui/combobox'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCategoryOptions } from '@/hooks/use-category-options'
+import { useGetCategories } from '@/hooks/use-category'
 
 export default function CategoryFilter({ value, onValueChange }: DataTableFilterProps) {
-  const { data, isPending } = useCategoryOptions()
+  const { data, isPending } = useGetCategories()
   const categories = data?.data ?? []
   const selected = categories.find((c) => String(c.id) === value) ?? null
 

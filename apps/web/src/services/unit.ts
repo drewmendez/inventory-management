@@ -1,13 +1,27 @@
-import type { PaginatedQueryResponse } from '@/types/api'
+import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
 import type { Unit, UnitPayload } from '@/types/unit'
 import { api } from '@/lib/api'
+
+export const getPaginatedUnits = async (queryString: string) => {
+  const response = await api(`/api/units?${queryString}`, {
+    method: 'GET',
+  })
+
+  const jsonData: PaginatedQueryResponse<Unit> = await response.json()
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  return jsonData
+}
 
 export const getUnits = async (queryString: string) => {
   const response = await api(`/api/units?${queryString}`, {
     method: 'GET',
   })
 
-  const jsonData: PaginatedQueryResponse<Unit> = await response.json()
+  const jsonData: QueryResponse<Unit[]> = await response.json()
 
   if (!response.ok) {
     throw new Error(response.statusText)

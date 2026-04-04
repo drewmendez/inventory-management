@@ -1,14 +1,14 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { User } from '@/types/user'
 import { DataTable } from '@/components/data-table'
-import { useGetUsers } from '@/hooks/use-user'
+import { useGetPaginatedUsers } from '@/hooks/use-user'
 import RoleFilter from './role-filter'
 import UpdateUser from './update-user'
 import ViewUser from './view-user'
 
 export function ManageUsers() {
   const dataTable = {
-    query: useGetUsers,
+    query: useGetPaginatedUsers,
     columns: [
       {
         header: 'First Name',

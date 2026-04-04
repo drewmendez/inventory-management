@@ -10,6 +10,10 @@ export interface PaginatedQueryResponse<T> {
   paginator_info: PaginatorInfo
 }
 
+export interface QueryResponse<T> {
+  data: T
+}
+
 export interface QueryParams {
   page?: number
   perPage?: number

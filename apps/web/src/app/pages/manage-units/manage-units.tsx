@@ -1,14 +1,14 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Unit } from '@/types/unit'
 import { DataTable } from '@/components/data-table'
-import { useGetUnits } from '@/hooks/use-unit'
+import { useGetPaginatedUnits } from '@/hooks/use-unit'
 import CreateUnit from './create-unit'
 import UpdateUnit from './update-unit'
 import ViewUnit from './view-unit'
 
 export function ManageUnits() {
   const dataTable = {
-    query: useGetUnits,
+    query: useGetPaginatedUnits,
     createActionLabel: 'Add unit',
     columns: [
       {

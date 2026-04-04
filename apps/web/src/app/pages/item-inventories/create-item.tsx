@@ -20,9 +20,9 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { useCategoryOptions } from '@/hooks/use-category-options'
+import { useGetCategories } from '@/hooks/use-category'
 import { useCreateItem } from '@/hooks/use-item'
-import { useUnitOptions } from '@/hooks/use-unit-options'
+import { useGetUnits } from '@/hooks/use-unit'
 import { CreateItemSchema } from '@/types/item'
 
 function CreateItemForm({
@@ -170,8 +170,8 @@ function CreateItemForm({
 
 export default function CreateItem({ open, onOpenChange }: DataTableModalProps) {
   const { mutate, isPending, error, reset: resetMutation } = useCreateItem()
-  const { data: categoriesResult, isPending: categoriesPending } = useCategoryOptions()
-  const { data: unitsResult, isPending: unitsPending } = useUnitOptions()
+  const { data: categoriesResult, isPending: categoriesPending } = useGetCategories()
+  const { data: unitsResult, isPending: unitsPending } = useGetUnits()
   const categories = categoriesResult?.data ?? []
   const units = unitsResult?.data ?? []
   const optionsReady = categories.length > 0 && units.length > 0

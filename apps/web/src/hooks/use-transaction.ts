@@ -2,15 +2,27 @@ import type { QueryParams } from '@/types/api'
 import type { StoreTransactionPayload } from '@/types/transaction'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { createTransaction, getTransactions } from '@/services/transaction'
+import { createTransaction, getPaginatedTransactions, getTransactions } from '@/services/transaction'
 
-export const useGetTransactions = (params: QueryParams) => {
+export const useGetTransactions = (params: QueryParams = {}) => {
+  const queryString = buildQueryString(params)
+  const filtersKey = params.filters ? JSON.stringify(params.filters) : null
+
+  return useQuery({
+    queryKey: ['transactions', 'list', params.sortBy, params.sortOrder, params.search, filtersKey],
+    queryFn: () => getTransactions(queryString),
+    staleTime: 60_000,
+  })
+}
+
+export const useGetPaginatedTransactions = (params: QueryParams) => {
   const queryString = buildQueryString(params)
   const filtersKey = params.filters ? JSON.stringify(params.filters) : null
 
   return useQuery({
     queryKey: [
       'transactions',
+      'paginated',
       params.page,
       params.perPage,
       params.sortBy,
@@ -18,7 +30,7 @@ export const useGetTransactions = (params: QueryParams) => {
       params.search,
       filtersKey,
     ],
-    queryFn: () => getTransactions(queryString),
+    queryFn: () => getPaginatedTransactions(queryString),
   })
 }
 

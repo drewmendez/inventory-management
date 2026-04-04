@@ -1,7 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
 import { DataTable } from '@/components/data-table'
-import { useGetItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/use-item'
 import CategoryFilter from './category-filter'
 import CreateItem from './create-item'
 import StatusFilter from './status-filter'
@@ -11,7 +11,7 @@ import ViewItem from './view-item'
 
 export function ItemInventories() {
   const dataTable = {
-    query: useGetItems,
+    query: useGetPaginatedItems,
     createActionLabel: 'Add item',
     columns: [
       {

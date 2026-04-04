@@ -8,10 +8,10 @@ import {
   ComboboxList,
 } from '@/components/ui/combobox'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useUnitOptions } from '@/hooks/use-unit-options'
+import { useGetUnits } from '@/hooks/use-unit'
 
 export default function UnitFilter({ value, onValueChange }: DataTableFilterProps) {
-  const { data, isPending } = useUnitOptions()
+  const { data, isPending } = useGetUnits()
   const units = data?.data ?? []
   const selected = units.find((u) => String(u.id) === value) ?? null
 

@@ -2,15 +2,27 @@ import type { QueryParams } from '@/types/api'
 import type { UpdateUserPayload } from '@/types/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { getUsers, updateUser } from '@/services/user'
+import { getPaginatedUsers, getUsers, updateUser } from '@/services/user'
 
-export const useGetUsers = (params: QueryParams) => {
+export const useGetUsers = (params: QueryParams = {}) => {
+  const queryString = buildQueryString(params)
+  const filtersKey = params.filters ? JSON.stringify(params.filters) : null
+
+  return useQuery({
+    queryKey: ['users', 'list', params.sortBy, params.sortOrder, params.search, filtersKey],
+    queryFn: () => getUsers(queryString),
+    staleTime: 60_000,
+  })
+}
+
+export const useGetPaginatedUsers = (params: QueryParams) => {
   const queryString = buildQueryString(params)
   const filtersKey = params.filters ? JSON.stringify(params.filters) : null
 
   return useQuery({
     queryKey: [
       'users',
+      'paginated',
       params.page,
       params.perPage,
       params.sortBy,
@@ -18,7 +30,7 @@ export const useGetUsers = (params: QueryParams) => {
       params.search,
       filtersKey,
     ],
-    queryFn: () => getUsers(queryString),
+    queryFn: () => getPaginatedUsers(queryString),
   })
 }
 

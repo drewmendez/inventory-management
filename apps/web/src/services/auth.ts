@@ -20,6 +20,7 @@ export const login = async (data: LoginFormData) => {
     throw new Error(jsonData.message ?? response.statusText)
   }
 }
+
 export const logout = async () => {
   const response = await api('/logout', {
     method: 'POST',

@@ -4,14 +4,14 @@ import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
-import { useGetItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/use-item'
 import { cn } from '@/lib/utils'
 
 const PER_PAGE = 10
 
 export function LowStockItems() {
   const [page, setPage] = useState(1)
-  const { data, isPending, isError, isFetching } = useGetItems({
+  const { data, isPending, isError, isFetching } = useGetPaginatedItems({
     page,
     perPage: PER_PAGE,
     filters: { status: 'low_stock' },

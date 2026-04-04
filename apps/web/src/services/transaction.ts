@@ -1,13 +1,27 @@
-import type { PaginatedQueryResponse } from '@/types/api'
+import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
 import type { StoreTransactionPayload, Transaction } from '@/types/transaction'
 import { api } from '@/lib/api'
+
+export const getPaginatedTransactions = async (queryString: string) => {
+  const response = await api(`/api/transactions?${queryString}`, {
+    method: 'GET',
+  })
+
+  const jsonData: PaginatedQueryResponse<Transaction> = await response.json()
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  return jsonData
+}
 
 export const getTransactions = async (queryString: string) => {
   const response = await api(`/api/transactions?${queryString}`, {
     method: 'GET',
   })
 
-  const jsonData: PaginatedQueryResponse<Transaction> = await response.json()
+  const jsonData: QueryResponse<Transaction[]> = await response.json()
 
   if (!response.ok) {
     throw new Error(response.statusText)

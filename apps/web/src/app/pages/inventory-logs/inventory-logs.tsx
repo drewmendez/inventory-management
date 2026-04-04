@@ -1,12 +1,12 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { InventoryMovement } from '@/types/inventory-movement'
 import { DataTable } from '@/components/data-table'
-import { useGetInventoryMovements } from '@/hooks/use-inventory-movement'
+import { useGetPaginatedInventoryMovements } from '@/hooks/use-inventory-movement'
 import ViewInventoryMovement from './view-inventory-movement'
 
 export function InventoryLogs() {
   const dataTable = {
-    query: useGetInventoryMovements,
+    query: useGetPaginatedInventoryMovements,
     columns: [
       {
         header: 'SKU',

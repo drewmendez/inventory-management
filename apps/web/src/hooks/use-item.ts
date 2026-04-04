@@ -2,15 +2,27 @@ import type { QueryParams } from '@/types/api'
 import type { CreateItemPayload, UpdateItemPayload } from '@/types/item'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { createItem, getItems, getItemsTotalCount, updateItem } from '@/services/item'
+import { createItem, getItems, getPaginatedItems, updateItem } from '@/services/item'
 
-export const useGetItems = (params: QueryParams) => {
+export const useGetItems = (params: QueryParams = {}) => {
+  const queryString = buildQueryString(params)
+  const filtersKey = params.filters ? JSON.stringify(params.filters) : null
+
+  return useQuery({
+    queryKey: ['items', 'list', params.sortBy, params.sortOrder, params.search, filtersKey],
+    queryFn: () => getItems(queryString),
+    staleTime: 60_000,
+  })
+}
+
+export const useGetPaginatedItems = (params: QueryParams) => {
   const queryString = buildQueryString(params)
   const filtersKey = params.filters ? JSON.stringify(params.filters) : null
 
   return useQuery({
     queryKey: [
       'items',
+      'paginated',
       params.page,
       params.perPage,
       params.sortBy,
@@ -18,14 +30,15 @@ export const useGetItems = (params: QueryParams) => {
       params.search,
       filtersKey,
     ],
-    queryFn: () => getItems(queryString),
+    queryFn: () => getPaginatedItems(queryString),
   })
 }
 
-export const useTotalItems = () => {
+export const useGetTotalItems = () => {
   return useQuery({
     queryKey: ['items', 'total-count'],
-    queryFn: getItemsTotalCount,
+    queryFn: () => getItems(buildQueryString({})),
+    select: (response) => response.data.length,
     staleTime: 60_000,
   })
 }
