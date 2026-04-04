@@ -1,10 +1,12 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Transaction } from '@/types/transaction'
-import TypeFilter from '@/app/pages/transactions/type-filter'
 import { DataTable } from '@/components/data-table'
 import { useGetPaginatedTransactions } from '@/hooks/use-transaction'
+import CreateTransaction from './components/create-transaction'
+import TypeFilter from './components/type-filter'
+import ViewTransaction from './components/view-transaction'
 
-export function RecentTransactions() {
+export default function Transactions() {
   const dataTable = {
     query: useGetPaginatedTransactions,
     createActionLabel: 'Add transaction',
@@ -12,6 +14,7 @@ export function RecentTransactions() {
       {
         header: 'Reference',
         accessorKey: 'reference_number',
+        isSortable: true,
       },
       {
         header: 'Type',
@@ -34,10 +37,15 @@ export function RecentTransactions() {
       {
         header: 'Created at',
         accessorKey: 'created_at',
+        isSortable: true,
       },
     ],
     filters: {
       type: TypeFilter,
+    },
+    crud: {
+      view: ViewTransaction,
+      create: CreateTransaction,
     },
   } satisfies DataTableProps<Transaction>
 

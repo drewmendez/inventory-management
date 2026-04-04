@@ -1,9 +1,9 @@
-import { InventoryCounts } from './inventory-counts'
-import { LowStockItems } from './low-stock-items'
-import { RecentTransactions } from './recent-transactions'
-import { TotalItems } from './total-items'
+import { InventoryCounts } from './components/inventory-counts'
+import { LowStockItems } from './components/low-stock-items'
+import { RecentTransactions } from './components/recent-transactions'
+import { TotalItems } from './components/total-items'
 
-export function Dashboard() {
+export default function Dashboard() {
   return (
     <div className="grid h-full gap-4 md:grid-cols-5 md:grid-rows-3">
       <div className="size-full">

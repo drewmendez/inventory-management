@@ -1,8 +1,8 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
-import CategoryFilter from '@/app/pages/item-inventories/category-filter'
-import StatusFilter from '@/app/pages/item-inventories/status-filter'
-import UnitFilter from '@/app/pages/item-inventories/unit-filter'
+import CategoryFilter from '@/app/pages/item-inventories/components/category-filter'
+import StatusFilter from '@/app/pages/item-inventories/components/status-filter'
+import UnitFilter from '@/app/pages/item-inventories/components/unit-filter'
 import { DataTable } from '@/components/data-table'
 import { useGetPaginatedItems } from '@/hooks/use-item'
 

@@ -2,9 +2,9 @@ import type { DataTableProps } from '@/types/data-table'
 import type { InventoryMovement } from '@/types/inventory-movement'
 import { DataTable } from '@/components/data-table'
 import { useGetPaginatedInventoryMovements } from '@/hooks/use-inventory-movement'
-import ViewInventoryMovement from './view-inventory-movement'
+import ViewInventoryMovement from './components/view-inventory-movement'
 
-export function InventoryLogs() {
+export default function InventoryLogs() {
   const dataTable = {
     query: useGetPaginatedInventoryMovements,
     columns: [

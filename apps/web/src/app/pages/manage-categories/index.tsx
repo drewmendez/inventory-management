@@ -2,11 +2,11 @@ import type { Category } from '@/types/category'
 import type { DataTableProps } from '@/types/data-table'
 import { DataTable } from '@/components/data-table'
 import { useGetPaginatedCategories } from '@/hooks/use-category'
-import CreateCategory from './create-category'
-import UpdateCategory from './update-category'
-import ViewCategory from './view-category'
+import CreateCategory from './components/create-category'
+import UpdateCategory from './components/update-category'
+import ViewCategory from './components/view-category'
 
-export function ManageCategories() {
+export default function ManageCategories() {
   const dataTable = {
     query: useGetPaginatedCategories,
     createActionLabel: 'Add category',

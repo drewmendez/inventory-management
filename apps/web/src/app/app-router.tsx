@@ -1,14 +1,14 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import AuthLayout from '@/app/layouts/auth-layout'
 import MainLayout from '@/app/layouts/main-layout'
-import { Dashboard } from '@/app/pages/dashboard'
-import { InventoryLogs } from '@/app/pages/inventory-logs'
-import { ItemInventories } from '@/app/pages/item-inventories'
+import Dashboard from '@/app/pages/dashboard'
+import InventoryLogs from '@/app/pages/inventory-logs'
+import ItemInventories from '@/app/pages/item-inventories'
 import Login from '@/app/pages/login'
-import { ManageCategories } from '@/app/pages/manage-categories'
-import { ManageUnits } from '@/app/pages/manage-units'
-import { ManageUsers } from '@/app/pages/manage-users'
-import { Transactions } from '@/app/pages/transactions'
+import ManageCategories from '@/app/pages/manage-categories'
+import ManageUnits from '@/app/pages/manage-units'
+import ManageUsers from '@/app/pages/manage-users'
+import Transactions from '@/app/pages/transactions'
 
 const router = createBrowserRouter([
   {

@@ -2,14 +2,14 @@ import type { DataTableProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
 import { DataTable } from '@/components/data-table'
 import { useGetPaginatedItems } from '@/hooks/use-item'
-import CategoryFilter from './category-filter'
-import CreateItem from './create-item'
-import StatusFilter from './status-filter'
-import UnitFilter from './unit-filter'
-import UpdateItem from './update-item'
-import ViewItem from './view-item'
+import CategoryFilter from './components/category-filter'
+import CreateItem from './components/create-item'
+import StatusFilter from './components/status-filter'
+import UnitFilter from './components/unit-filter'
+import UpdateItem from './components/update-item'
+import ViewItem from './components/view-item'
 
-export function ItemInventories() {
+export default function ItemInventories() {
   const dataTable = {
     query: useGetPaginatedItems,
     createActionLabel: 'Add item',
