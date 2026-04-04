@@ -46,6 +46,23 @@ export default function Transactions() {
         isSortable: true,
       },
     ],
+    expandableRow: {
+      accessorKey: 'transaction_items',
+      columns: [
+        {
+          header: 'SKU',
+          accessorKey: 'item.sku',
+        },
+        {
+          header: 'Item',
+          accessorKey: 'item.name',
+        },
+        {
+          header: 'Quantity',
+          accessorKey: 'quantity',
+        },
+      ],
+    },
     filters: {
       type: TypeFilter,
     },

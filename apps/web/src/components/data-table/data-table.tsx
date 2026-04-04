@@ -1,16 +1,16 @@
-import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
-import type { DataTableProps } from '@/types/data-table'
+import type { Column, ColumnDef, ExpandedState, HeaderContext, SortingState } from '@tanstack/react-table'
+import type { DataTableExpandedColumn, DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { Filters } from './filters'
+import Filters from './filters'
 import Paginator from './paginator'
-import { Search } from './search'
+import Search from './search'
 
 export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TData> }) {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 })
@@ -20,6 +20,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [viewRow, setViewRow] = useState<TData | null>(null)
   const [updateRow, setUpdateRow] = useState<TData | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
+  const [expanded, setExpanded] = useState<ExpandedState>({})
 
   const primarySort = sorting[0]
   const { data, isPending } = dataTable.query({
@@ -35,6 +36,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const UpdateRowAction = dataTable.rowActions?.update
   const hasRowActions = Boolean(ViewRowAction || UpdateRowAction)
   const CreateAction = dataTable.tableActions?.create
+  const expandableRowConfig = dataTable.expandableRow
+  const showActionsColumn = hasRowActions || Boolean(expandableRowConfig)
 
   const columnDefs = useMemo((): ColumnDef<TData>[] => {
     const dataColumns: ColumnDef<TData>[] = dataTable.columns.map((column) => {
@@ -51,7 +54,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
       }
     })
 
-    if (!hasRowActions) {
+    if (!showActionsColumn) {
       return dataColumns
     }
 
@@ -81,13 +84,25 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                 <Edit />
               </Button>
             )}
+            {expandableRowConfig && row.getCanExpand() && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-8 w-8 p-0"
+                aria-label={row.getIsExpanded() ? 'Collapse row details' : 'Expand row details'}
+                aria-expanded={row.getIsExpanded()}
+                onClick={() => row.toggleExpanded()}
+              >
+                <ChevronsUpDown className="size-4" />
+              </Button>
+            )}
           </div>
         )
       },
     }
 
     return [...dataColumns, actionsColumn]
-  }, [dataTable.columns, hasRowActions, ViewRowAction, UpdateRowAction])
+  }, [dataTable.columns, expandableRowConfig, showActionsColumn, ViewRowAction, UpdateRowAction])
 
   const table = useReactTable({
     columns: columnDefs,
@@ -99,7 +114,15 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     rowCount: data?.paginator_info.total ?? 0,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
-    state: { pagination, sorting },
+    onExpandedChange: setExpanded,
+    getRowCanExpand: (row) => {
+      if (!expandableRowConfig) {
+        return false
+      }
+      const raw = getValueByPath(row.original, expandableRowConfig.accessorKey)
+      return Array.isArray(raw) && raw.length > 0
+    },
+    state: { pagination, sorting, expanded },
   })
 
   const filtersConfig = dataTable.filters
@@ -162,18 +185,27 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
               ))
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="h-12">
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn('bg-card px-6', {
-                        'sticky right-0': cell.column.id === 'actions',
-                      })}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <Fragment key={row.id}>
+                  <TableRow className="h-12">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn('bg-card px-6', {
+                          'sticky right-0': cell.column.id === 'actions',
+                        })}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {expandableRowConfig && row.getIsExpanded() ? (
+                    <TableRow className="hover:bg-transparent">
+                      <TableCell colSpan={row.getVisibleCells().length} className="bg-muted/25 p-0 px-6 py-3">
+                        <ExpandableRowTable config={expandableRowConfig} parentRow={row.original} />
+                      </TableCell>
+                    </TableRow>
+                  ) : null}
+                </Fragment>
               ))
             ) : (
               <TableRow>
@@ -217,6 +249,89 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
 
       {CreateAction ? <CreateAction open={createOpen} onOpenChange={setCreateOpen} /> : null}
     </Card>
+  )
+}
+
+function getValueByPath(obj: unknown, path: string): unknown {
+  if (path === '') {
+    return obj
+  }
+
+  let value: unknown = obj
+  for (const key of path.split('.')) {
+    if (key === '') {
+      continue
+    }
+    if (value == null || typeof value !== 'object') {
+      return undefined
+    }
+    value = (value as Record<string, unknown>)[key]
+  }
+  return value
+}
+
+function renderExpandedCell(column: DataTableExpandedColumn, original: unknown) {
+  const getValue = () => {
+    if (column.accessorFn) {
+      return column.accessorFn(original)
+    }
+    return getValueByPath(original, column.accessorKey)
+  }
+  if (column.cellFormat) {
+    return column.cellFormat({ row: { original }, getValue })
+  }
+  const v = getValue()
+  if (v === null || v === undefined) {
+    return '—'
+  }
+  if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
+    return String(v)
+  }
+  return String(v)
+}
+
+function ExpandableRowTable<TData>({
+  config,
+  parentRow,
+}: {
+  config: NonNullable<DataTableProps<TData>['expandableRow']>
+  parentRow: TData
+}) {
+  const raw = getValueByPath(parentRow, config.accessorKey)
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return null
+  }
+
+  return (
+    <Table className="bg-card">
+      <TableHeader>
+        <TableRow>
+          {config.columns.map((col) => (
+            <TableHead key={col.accessorKey} className="bg-primary px-6 text-primary-foreground">
+              {col.header}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {raw.map((child, rowIndex) => {
+          const id =
+            typeof child === 'object' && child !== null && 'id' in child
+              ? (child as { id: unknown }).id
+              : undefined
+          const rowKey = typeof id === 'string' || typeof id === 'number' ? String(id) : `row-${rowIndex}`
+          return (
+            <TableRow key={rowKey} className="hover:bg-transparent">
+              {config.columns.map((col) => (
+                <TableCell key={col.accessorKey} className="px-6">
+                  {renderExpandedCell(col, child)}
+                </TableCell>
+              ))}
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
   )
 }
 

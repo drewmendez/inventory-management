@@ -6,7 +6,7 @@ export interface SearchProps {
   onDebouncedSearchChange: (search: string) => void
 }
 
-export function Search({ onDebouncedSearchChange }: SearchProps) {
+export default function Search({ onDebouncedSearchChange }: SearchProps) {
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearch = useDebounce(searchInput)
 

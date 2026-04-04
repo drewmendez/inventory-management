@@ -20,7 +20,7 @@ export interface FiltersProps {
   onFilterPageReset: () => void
 }
 
-export function Filters({ config, onFiltersChange, onFilterPageReset }: FiltersProps) {
+export default function Filters({ config, onFiltersChange, onFilterPageReset }: FiltersProps) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false)
   const [draftFilterValues, setDraftFilterValues] = useState<Record<string, string>>({})

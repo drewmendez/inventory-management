@@ -1,6 +1,6 @@
 import type { UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import type { ComponentType } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import type { PaginatedQueryResponse, QueryParams } from '@/types/api'
 
 export interface DataTableFilterProps {
@@ -25,14 +25,25 @@ interface Column<T> {
   cellFormat?: ColumnDef<T>['cell']
 }
 
+export interface DataTableExpandedColumn {
+  header: string
+  accessorKey: string
+  accessorFn?: (row: unknown) => string
+  cellFormat?: (ctx: { row: { original: unknown }; getValue: () => unknown }) => ReactNode
+}
+
 export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams> = (
   params: TParams,
 ) => UseQueryResult<TData, Error>
 
 export interface DataTableProps<TData, TParams extends QueryParams = QueryParams> {
   title: string
-  columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
+  columns: Column<TData>[]
+  expandableRow?: {
+    accessorKey: string
+    columns: DataTableExpandedColumn[]
+  }
   tableActions?: {
     create?: ComponentType<DataTableModalProps>
   }
