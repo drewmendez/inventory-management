@@ -8,7 +8,7 @@ import {
   ComboboxList,
 } from '@/components/ui/combobox'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useGetUnits } from '@/hooks/use-unit'
+import { useGetUnits } from '@/hooks/models/use-unit'
 
 export default function UnitFilter({ value, onValueChange }: DataTableFilterProps) {
   const { data, isPending } = useGetUnits()

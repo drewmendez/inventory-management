@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
-import { useGetTotalItems } from '@/hooks/use-item'
+import { useGetTotalItems } from '@/hooks/models/use-item'
 
 export function TotalItems() {
   const { data: total, isPending, isError } = useGetTotalItems()

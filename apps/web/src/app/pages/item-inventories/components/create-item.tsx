@@ -20,9 +20,9 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { useGetCategories } from '@/hooks/use-category'
-import { useCreateItem } from '@/hooks/use-item'
-import { useGetUnits } from '@/hooks/use-unit'
+import { useGetCategories } from '@/hooks/models/use-category'
+import { useCreateItem } from '@/hooks/models/use-item'
+import { useGetUnits } from '@/hooks/models/use-unit'
 import { CreateItemSchema } from '@/types/item'
 
 function CreateItemForm({

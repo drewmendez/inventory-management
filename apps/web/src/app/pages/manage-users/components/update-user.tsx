@@ -18,7 +18,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { useUpdateUser } from '@/hooks/use-user'
+import { useUpdateUser } from '@/hooks/models/use-user'
 import { UpdateUserSchema, USER_ROLE_OPTIONS } from '@/types/user'
 
 export default function UpdateUser({ row, open, onOpenChange }: DataTableRowModalProps<User>) {

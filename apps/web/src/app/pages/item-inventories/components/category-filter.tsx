@@ -8,7 +8,7 @@ import {
   ComboboxList,
 } from '@/components/ui/combobox'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useGetCategories } from '@/hooks/use-category'
+import { useGetCategories } from '@/hooks/models/use-category'
 
 export default function CategoryFilter({ value, onValueChange }: DataTableFilterProps) {
   const { data, isPending } = useGetCategories()

@@ -4,7 +4,7 @@ import CategoryFilter from '@/app/pages/item-inventories/components/category-fil
 import StatusFilter from '@/app/pages/item-inventories/components/status-filter'
 import UnitFilter from '@/app/pages/item-inventories/components/unit-filter'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/models/use-item'
 
 export function InventoryCounts() {
   const dataTable = {

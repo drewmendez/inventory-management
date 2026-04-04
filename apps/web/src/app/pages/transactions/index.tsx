@@ -1,7 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Transaction } from '@/types/transaction'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedTransactions } from '@/hooks/use-transaction'
+import { useGetPaginatedTransactions } from '@/hooks/models/use-transaction'
 import CreateTransaction from './components/create-transaction'
 import TypeFilter from './components/type-filter'
 import ViewTransaction from './components/view-transaction'

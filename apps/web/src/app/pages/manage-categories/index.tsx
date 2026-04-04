@@ -1,7 +1,7 @@
 import type { Category } from '@/types/category'
 import type { DataTableProps } from '@/types/data-table'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedCategories } from '@/hooks/use-category'
+import { useGetPaginatedCategories } from '@/hooks/models/use-category'
 import CreateCategory from './components/create-category'
 import UpdateCategory from './components/update-category'
 import ViewCategory from './components/view-category'

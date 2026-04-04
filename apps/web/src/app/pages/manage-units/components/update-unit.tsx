@@ -17,7 +17,7 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useUpdateUnit } from '@/hooks/use-unit'
+import { useUpdateUnit } from '@/hooks/models/use-unit'
 import { UpdateUnitSchema } from '@/types/unit'
 
 export default function UpdateUnit({ row, open, onOpenChange }: DataTableRowModalProps<Unit>) {

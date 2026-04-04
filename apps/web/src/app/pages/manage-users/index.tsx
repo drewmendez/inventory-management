@@ -1,7 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { User } from '@/types/user'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedUsers } from '@/hooks/use-user'
+import { useGetPaginatedUsers } from '@/hooks/models/use-user'
 import RoleFilter from './components/role-filter'
 import UpdateUser from './components/update-user'
 import ViewUser from './components/view-user'

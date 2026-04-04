@@ -29,8 +29,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Spinner } from '@/components/ui/spinner'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
-import { useGetItems } from '@/hooks/use-item'
-import { useCreateTransaction } from '@/hooks/use-transaction'
+import { useGetItems } from '@/hooks/models/use-item'
+import { useCreateTransaction } from '@/hooks/models/use-transaction'
 import { StoreTransactionSchema } from '@/types/transaction'
 
 const defaultLine = (): StoreTransactionFormInput['transaction_items'][number] => ({

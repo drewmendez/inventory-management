@@ -17,7 +17,7 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useCreateUnit } from '@/hooks/use-unit'
+import { useCreateUnit } from '@/hooks/models/use-unit'
 import { CreateUnitSchema } from '@/types/unit'
 
 export default function CreateUnit({ open, onOpenChange }: DataTableModalProps) {

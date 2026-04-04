@@ -1,7 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/models/use-item'
 import CategoryFilter from './components/category-filter'
 import CreateItem from './components/create-item'
 import StatusFilter from './components/status-filter'

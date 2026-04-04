@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
-import { useGetPaginatedItems } from '@/hooks/use-item'
+import { useGetPaginatedItems } from '@/hooks/models/use-item'
 import { cn } from '@/lib/utils'
 
 const PER_PAGE = 10

@@ -2,7 +2,7 @@ import type { DataTableProps } from '@/types/data-table'
 import type { Transaction } from '@/types/transaction'
 import TypeFilter from '@/app/pages/transactions/components/type-filter'
 import { DataTable } from '@/components/data-table'
-import { useGetPaginatedTransactions } from '@/hooks/use-transaction'
+import { useGetPaginatedTransactions } from '@/hooks/models/use-transaction'
 
 export function RecentTransactions() {
   const dataTable = {

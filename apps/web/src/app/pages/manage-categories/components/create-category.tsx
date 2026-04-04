@@ -17,7 +17,7 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useCreateCategory } from '@/hooks/use-category'
+import { useCreateCategory } from '@/hooks/models/use-category'
 import { CreateCategorySchema } from '@/types/category'
 
 export default function CreateCategory({ open, onOpenChange }: DataTableModalProps) {

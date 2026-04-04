@@ -17,7 +17,7 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useUpdateCategory } from '@/hooks/use-category'
+import { useUpdateCategory } from '@/hooks/models/use-category'
 import { UpdateCategorySchema } from '@/types/category'
 
 export default function UpdateCategory({ row, open, onOpenChange }: DataTableRowModalProps<Category>) {
