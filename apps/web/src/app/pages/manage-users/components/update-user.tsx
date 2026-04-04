@@ -1,6 +1,5 @@
-import type { Resolver } from 'react-hook-form'
 import type { DataTableRowModalProps } from '@/types/data-table'
-import type { UpdateUserFormData, UpdateUserPayload, User } from '@/types/user'
+import type { UpdateUserFormData, User } from '@/types/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -19,13 +18,13 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
 import { useUpdateUser } from '@/hooks/models/use-user'
-import { UpdateUserSchema, USER_ROLE_OPTIONS } from '@/types/user'
+import { UpdateUserFormSchema, USER_ROLE_OPTIONS } from '@/types/user'
 
 export default function UpdateUser({ row, open, onOpenChange }: DataTableRowModalProps<User>) {
   const { mutate, isPending, error, reset: resetMutation } = useUpdateUser()
 
   const { control, handleSubmit } = useForm<UpdateUserFormData>({
-    resolver: zodResolver(UpdateUserSchema as never) as Resolver<UpdateUserFormData>,
+    resolver: zodResolver(UpdateUserFormSchema),
     defaultValues: {
       first_name: row.first_name,
       middle_name: row.middle_name ?? '',
@@ -36,16 +35,8 @@ export default function UpdateUser({ row, open, onOpenChange }: DataTableRowModa
   })
 
   const onSubmit = (data: UpdateUserFormData) => {
-    const payload: UpdateUserPayload = {
-      first_name: data.first_name,
-      middle_name: data.middle_name.trim() === '' ? null : data.middle_name.trim(),
-      last_name: data.last_name,
-      email: data.email,
-      role_id: data.role_id,
-    }
-
     mutate(
-      { userId: row.id, data: payload },
+      { userId: row.id, data },
       {
         onSuccess: () => onOpenChange(false),
       },

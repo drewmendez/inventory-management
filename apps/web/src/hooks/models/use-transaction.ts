@@ -1,5 +1,5 @@
 import type { QueryParams } from '@/types/api'
-import type { StoreTransactionPayload } from '@/types/transaction'
+import type { CreateTransactionFormData } from '@/types/transaction'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
 import { createTransaction, getPaginatedTransactions, getTransactions } from '@/services/transaction'
@@ -38,7 +38,7 @@ export const useCreateTransaction = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: StoreTransactionPayload) => createTransaction(data),
+    mutationFn: (data: CreateTransactionFormData) => createTransaction(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['transactions'] })
       void queryClient.invalidateQueries({ queryKey: ['items'] })

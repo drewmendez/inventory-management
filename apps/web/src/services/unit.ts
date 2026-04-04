@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
-import type { Unit, UnitPayload } from '@/types/unit'
+import type { CreateUnitFormData, Unit, UpdateUnitFormData } from '@/types/unit'
 import { api } from '@/lib/api'
 
 export const getPaginatedUnits = async (queryString: string) => {
@@ -30,7 +30,7 @@ export const getUnits = async (queryString: string) => {
   return jsonData
 }
 
-export const createUnit = async (payload: UnitPayload) => {
+export const createUnit = async (payload: CreateUnitFormData) => {
   const response = await api('/api/units', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -45,7 +45,7 @@ export const createUnit = async (payload: UnitPayload) => {
   return jsonData.data as Unit
 }
 
-export const updateUnit = async (unitId: number, payload: UnitPayload) => {
+export const updateUnit = async (unitId: number, payload: UpdateUnitFormData) => {
   const response = await api(`/api/units/${unitId}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),

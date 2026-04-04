@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
-import type { Category, CategoryPayload } from '@/types/category'
+import type { Category, CreateCategoryFormData, UpdateCategoryFormData } from '@/types/category'
 import { api } from '@/lib/api'
 
 export const getPaginatedCategories = async (queryString: string) => {
@@ -30,7 +30,7 @@ export const getCategories = async (queryString: string) => {
   return jsonData
 }
 
-export const createCategory = async (payload: CategoryPayload) => {
+export const createCategory = async (payload: CreateCategoryFormData) => {
   const response = await api('/api/categories', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -45,7 +45,7 @@ export const createCategory = async (payload: CategoryPayload) => {
   return jsonData.data as Category
 }
 
-export const updateCategory = async (categoryId: number, payload: CategoryPayload) => {
+export const updateCategory = async (categoryId: number, payload: UpdateCategoryFormData) => {
   const response = await api(`/api/categories/${categoryId}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),

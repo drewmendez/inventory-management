@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
-import type { UpdateUserPayload, User } from '@/types/user'
+import type { UpdateUserFormData, User } from '@/types/user'
 import { api } from '@/lib/api'
 
 export const getPaginatedUsers = async (queryString: string) => {
@@ -30,7 +30,7 @@ export const getUsers = async (queryString: string) => {
   return jsonData
 }
 
-export const updateUser = async (userId: number, payload: UpdateUserPayload) => {
+export const updateUser = async (userId: number, payload: UpdateUserFormData) => {
   const response = await api(`/api/users/${userId}`, {
     method: 'PATCH',
     body: JSON.stringify({

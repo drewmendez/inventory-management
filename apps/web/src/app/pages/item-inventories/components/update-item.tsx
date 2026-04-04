@@ -1,6 +1,5 @@
-import type { Resolver } from 'react-hook-form'
 import type { DataTableRowModalProps } from '@/types/data-table'
-import type { Item, UpdateItemFormValues, UpdateItemPayload } from '@/types/item'
+import type { Item, UpdateItemFormData } from '@/types/item'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -21,7 +20,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useGetCategories } from '@/hooks/models/use-category'
 import { useUpdateItem } from '@/hooks/models/use-item'
 import { useGetUnits } from '@/hooks/models/use-unit'
-import { UpdateItemSchema } from '@/types/item'
+import { UpdateItemFormSchema } from '@/types/item'
 
 export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModalProps<Item>) {
   const { mutate, isPending, error, reset: resetMutation } = useUpdateItem()
@@ -31,12 +30,8 @@ export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModa
   const units = unitsResult?.data ?? []
   const optionsReady = categories.length > 0 && units.length > 0
 
-  const { control, handleSubmit } = useForm<UpdateItemFormValues, unknown, UpdateItemPayload>({
-    resolver: zodResolver(UpdateItemSchema as never) as Resolver<
-      UpdateItemFormValues,
-      unknown,
-      UpdateItemPayload
-    >,
+  const { control, handleSubmit } = useForm<UpdateItemFormData>({
+    resolver: zodResolver(UpdateItemFormSchema),
     defaultValues: {
       name: row.name,
       reorder_level: row.reorder_level,
@@ -45,7 +40,7 @@ export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModa
     },
   })
 
-  const onSubmit = (data: UpdateItemPayload) => {
+  const onSubmit = (data: UpdateItemFormData) => {
     mutate(
       { itemId: row.id, data },
       {

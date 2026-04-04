@@ -1,5 +1,5 @@
 import type { QueryParams } from '@/types/api'
-import type { UnitPayload } from '@/types/unit'
+import type { CreateUnitFormData, UpdateUnitFormData } from '@/types/unit'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
 import { createUnit, getPaginatedUnits, getUnits, updateUnit } from '@/services/unit'
@@ -38,7 +38,7 @@ export const useCreateUnit = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: UnitPayload) => createUnit(data),
+    mutationFn: (data: CreateUnitFormData) => createUnit(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['units'] })
     },
@@ -49,7 +49,7 @@ export const useUpdateUnit = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ unitId, data }: { unitId: number; data: UnitPayload }) => updateUnit(unitId, data),
+    mutationFn: ({ unitId, data }: { unitId: number; data: UpdateUnitFormData }) => updateUnit(unitId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['units'] })
     },

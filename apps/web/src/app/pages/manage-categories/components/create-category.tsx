@@ -1,5 +1,4 @@
-import type { Resolver } from 'react-hook-form'
-import type { CategoryFormInput, CategoryPayload } from '@/types/category'
+import type { CreateCategoryFormData } from '@/types/category'
 import type { DataTableModalProps } from '@/types/data-table'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
@@ -18,24 +17,20 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useCreateCategory } from '@/hooks/models/use-category'
-import { CreateCategorySchema } from '@/types/category'
+import { CreateCategoryFormSchema } from '@/types/category'
 
 export default function CreateCategory({ open, onOpenChange }: DataTableModalProps) {
   const { mutate, isPending, error, reset: resetMutation } = useCreateCategory()
 
-  const { control, handleSubmit, reset } = useForm<CategoryFormInput, unknown, CategoryPayload>({
-    resolver: zodResolver(CreateCategorySchema as never) as Resolver<
-      CategoryFormInput,
-      unknown,
-      CategoryPayload
-    >,
+  const { control, handleSubmit, reset } = useForm<CreateCategoryFormData>({
+    resolver: zodResolver(CreateCategoryFormSchema),
     defaultValues: {
       name: '',
       prefix: '',
     },
   })
 
-  const onSubmit = (data: CategoryPayload) => {
+  const onSubmit = (data: CreateCategoryFormData) => {
     mutate(data, {
       onSuccess: () => {
         onOpenChange(false)
@@ -91,13 +86,12 @@ export default function CreateCategory({ open, onOpenChange }: DataTableModalPro
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="create-category-prefix">Prefix</FieldLabel>
+                  <FieldLabel htmlFor="create-category-prefix">Prefix (3 characters)</FieldLabel>
                   <Input
                     id="create-category-prefix"
-                    {...field}
                     maxLength={3}
-                    autoComplete="off"
                     className="font-mono uppercase"
+                    {...field}
                     aria-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

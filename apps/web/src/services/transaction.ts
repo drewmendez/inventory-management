@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
-import type { StoreTransactionPayload, Transaction } from '@/types/transaction'
+import type { CreateTransactionFormData, Transaction } from '@/types/transaction'
 import { api } from '@/lib/api'
 
 export const getPaginatedTransactions = async (queryString: string) => {
@@ -30,7 +30,7 @@ export const getTransactions = async (queryString: string) => {
   return jsonData
 }
 
-export const createTransaction = async (payload: StoreTransactionPayload) => {
+export const createTransaction = async (payload: CreateTransactionFormData) => {
   const response = await api('/api/transactions', {
     method: 'POST',
     body: JSON.stringify(payload),

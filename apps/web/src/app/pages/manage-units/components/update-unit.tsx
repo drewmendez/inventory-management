@@ -1,6 +1,5 @@
-import type { Resolver } from 'react-hook-form'
 import type { DataTableRowModalProps } from '@/types/data-table'
-import type { Unit, UnitFormInput, UnitPayload } from '@/types/unit'
+import type { Unit, UpdateUnitFormData } from '@/types/unit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -23,15 +22,15 @@ import { UpdateUnitSchema } from '@/types/unit'
 export default function UpdateUnit({ row, open, onOpenChange }: DataTableRowModalProps<Unit>) {
   const { mutate, isPending, error, reset: resetMutation } = useUpdateUnit()
 
-  const { control, handleSubmit } = useForm<UnitFormInput, unknown, UnitPayload>({
-    resolver: zodResolver(UpdateUnitSchema as never) as Resolver<UnitFormInput, unknown, UnitPayload>,
+  const { control, handleSubmit } = useForm<UpdateUnitFormData>({
+    resolver: zodResolver(UpdateUnitSchema),
     defaultValues: {
       name: row.name,
       symbol: row.symbol,
     },
   })
 
-  const onSubmit = (data: UnitPayload) => {
+  const onSubmit = (data: UpdateUnitFormData) => {
     mutate(
       { unitId: row.id, data },
       {

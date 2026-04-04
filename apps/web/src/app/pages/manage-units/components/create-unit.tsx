@@ -1,6 +1,5 @@
-import type { Resolver } from 'react-hook-form'
 import type { DataTableModalProps } from '@/types/data-table'
-import type { UnitFormInput, UnitPayload } from '@/types/unit'
+import type { CreateUnitFormData } from '@/types/unit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -23,15 +22,15 @@ import { CreateUnitSchema } from '@/types/unit'
 export default function CreateUnit({ open, onOpenChange }: DataTableModalProps) {
   const { mutate, isPending, error, reset: resetMutation } = useCreateUnit()
 
-  const { control, handleSubmit, reset } = useForm<UnitFormInput, unknown, UnitPayload>({
-    resolver: zodResolver(CreateUnitSchema as never) as Resolver<UnitFormInput, unknown, UnitPayload>,
+  const { control, handleSubmit, reset } = useForm<CreateUnitFormData>({
+    resolver: zodResolver(CreateUnitSchema),
     defaultValues: {
       name: '',
       symbol: '',
     },
   })
 
-  const onSubmit = (data: UnitPayload) => {
+  const onSubmit = (data: CreateUnitFormData) => {
     mutate(data, {
       onSuccess: () => {
         onOpenChange(false)

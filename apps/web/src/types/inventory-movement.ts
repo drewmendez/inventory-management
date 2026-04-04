@@ -2,7 +2,7 @@ import type { Item } from './item'
 
 export interface InventoryMovementTransactionItem {
   id: number
-  quantity: string
+  quantity: number
   item: Item
   created_at: string
   updated_at: string
@@ -10,8 +10,8 @@ export interface InventoryMovementTransactionItem {
 
 export interface InventoryMovement {
   id: number
-  from_quantity: string
-  to_quantity: string
+  from_quantity: number
+  to_quantity: number
   transaction_item: InventoryMovementTransactionItem
   created_at: string
   updated_at: string

@@ -1,5 +1,4 @@
-import type { Resolver } from 'react-hook-form'
-import type { Category, CategoryFormInput, CategoryPayload } from '@/types/category'
+import type { Category, UpdateCategoryFormData } from '@/types/category'
 import type { DataTableRowModalProps } from '@/types/data-table'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
@@ -18,24 +17,20 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useUpdateCategory } from '@/hooks/models/use-category'
-import { UpdateCategorySchema } from '@/types/category'
+import { UpdateCategoryFormSchema } from '@/types/category'
 
 export default function UpdateCategory({ row, open, onOpenChange }: DataTableRowModalProps<Category>) {
   const { mutate, isPending, error, reset: resetMutation } = useUpdateCategory()
 
-  const { control, handleSubmit } = useForm<CategoryFormInput, unknown, CategoryPayload>({
-    resolver: zodResolver(UpdateCategorySchema as never) as Resolver<
-      CategoryFormInput,
-      unknown,
-      CategoryPayload
-    >,
+  const { control, handleSubmit } = useForm<UpdateCategoryFormData>({
+    resolver: zodResolver(UpdateCategoryFormSchema),
     defaultValues: {
       name: row.name,
       prefix: row.prefix,
     },
   })
 
-  const onSubmit = (data: CategoryPayload) => {
+  const onSubmit = (data: UpdateCategoryFormData) => {
     mutate(
       { categoryId: row.id, data },
       {

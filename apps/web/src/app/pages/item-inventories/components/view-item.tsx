@@ -2,7 +2,7 @@ import type { DataTableRowModalProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
-function Field({ label, value }: { label: string; value: string }) {
+function Field({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="grid gap-0.5">
       <div className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</div>

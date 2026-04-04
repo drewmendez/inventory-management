@@ -1,5 +1,5 @@
 import type { QueryParams } from '@/types/api'
-import type { CreateItemPayload, UpdateItemPayload } from '@/types/item'
+import type { CreateItemFormData, UpdateItemFormData } from '@/types/item'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
 import { createItem, getItems, getPaginatedItems, updateItem } from '@/services/item'
@@ -47,7 +47,7 @@ export const useCreateItem = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateItemPayload) => createItem(data),
+    mutationFn: (data: CreateItemFormData) => createItem(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['items'] })
     },
@@ -58,7 +58,7 @@ export const useUpdateItem = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ itemId, data }: { itemId: number; data: UpdateItemPayload }) => updateItem(itemId, data),
+    mutationFn: ({ itemId, data }: { itemId: number; data: UpdateItemFormData }) => updateItem(itemId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['items'] })
     },

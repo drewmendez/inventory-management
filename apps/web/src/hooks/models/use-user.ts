@@ -1,5 +1,5 @@
 import type { QueryParams } from '@/types/api'
-import type { UpdateUserPayload } from '@/types/user'
+import type { UpdateUserFormData } from '@/types/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
 import { getPaginatedUsers, getUsers, updateUser } from '@/services/user'
@@ -38,7 +38,7 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ userId, data }: { userId: number; data: UpdateUserPayload }) => updateUser(userId, data),
+    mutationFn: ({ userId, data }: { userId: number; data: UpdateUserFormData }) => updateUser(userId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['users'] })
     },

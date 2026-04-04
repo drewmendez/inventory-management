@@ -1,5 +1,5 @@
 import type { PaginatedQueryResponse, QueryResponse } from '@/types/api'
-import type { CreateItemPayload, Item, UpdateItemPayload } from '@/types/item'
+import type { CreateItemFormData, Item, UpdateItemFormData } from '@/types/item'
 import { api } from '@/lib/api'
 
 export const getPaginatedItems = async (queryString: string) => {
@@ -30,7 +30,7 @@ export const getItems = async (queryString: string) => {
   return jsonData
 }
 
-export const createItem = async (payload: CreateItemPayload) => {
+export const createItem = async (payload: CreateItemFormData) => {
   const response = await api('/api/items', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -45,7 +45,7 @@ export const createItem = async (payload: CreateItemPayload) => {
   return jsonData.data as Item
 }
 
-export const updateItem = async (itemId: number, payload: UpdateItemPayload) => {
+export const updateItem = async (itemId: number, payload: UpdateItemFormData) => {
   const response = await api(`/api/items/${itemId}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),

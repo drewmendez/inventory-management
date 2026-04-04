@@ -1,7 +1,6 @@
-import type { Resolver } from 'react-hook-form'
 import type { Category } from '@/types/category'
 import type { DataTableModalProps } from '@/types/data-table'
-import type { CreateItemPayload, ItemFormValues } from '@/types/item'
+import type { CreateItemFormData } from '@/types/item'
 import type { Unit } from '@/types/unit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
@@ -23,7 +22,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useGetCategories } from '@/hooks/models/use-category'
 import { useCreateItem } from '@/hooks/models/use-item'
 import { useGetUnits } from '@/hooks/models/use-unit'
-import { CreateItemSchema } from '@/types/item'
+import { CreateItemFormSchema } from '@/types/item'
 
 function CreateItemForm({
   categories,
@@ -36,20 +35,20 @@ function CreateItemForm({
   units: Unit[]
   isPending: boolean
   onClose: () => void
-  onSubmitPayload: (payload: CreateItemPayload) => void
+  onSubmitPayload: (payload: CreateItemFormData) => void
 }) {
-  const { control, handleSubmit } = useForm<ItemFormValues, unknown, CreateItemPayload>({
-    resolver: zodResolver(CreateItemSchema as never) as Resolver<ItemFormValues, unknown, CreateItemPayload>,
+  const { control, handleSubmit } = useForm<CreateItemFormData>({
+    resolver: zodResolver(CreateItemFormSchema),
     defaultValues: {
       name: '',
-      quantity: '0',
-      reorder_level: '0',
+      quantity: 0,
+      reorder_level: 0,
       category_id: categories[0]!.id,
       unit_id: units[0]!.id,
     },
   })
 
-  const onSubmit = (data: CreateItemPayload) => {
+  const onSubmit = (data: CreateItemFormData) => {
     onSubmitPayload(data)
   }
 

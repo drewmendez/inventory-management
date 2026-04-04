@@ -21,7 +21,6 @@ class TransactionResource extends JsonResource
             'type' => match ((int) $this->type) {
                 1 => 'Stock In',
                 2 => 'Stock Out',
-                default => 'Unknown',
             },
             'remarks' => $this->remarks,
             'user' => new UserResource($this->user),

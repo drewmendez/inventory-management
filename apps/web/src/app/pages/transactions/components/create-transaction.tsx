@@ -1,7 +1,6 @@
-import type { Resolver } from 'react-hook-form'
 import type { DataTableModalProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
-import type { StoreTransactionFormInput, StoreTransactionPayload } from '@/types/transaction'
+import type { CreateTransactionFormData } from '@/types/transaction'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
@@ -31,11 +30,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { useGetItems } from '@/hooks/models/use-item'
 import { useCreateTransaction } from '@/hooks/models/use-transaction'
-import { StoreTransactionSchema } from '@/types/transaction'
+import { TransactionFormSchema } from '@/types/transaction'
 
-const defaultLine = (): StoreTransactionFormInput['transaction_items'][number] => ({
+const defaultLine = (): CreateTransactionFormData['transaction_items'][number] => ({
   item_id: 0,
-  quantity: '',
+  quantity: 0.01,
 })
 
 export default function CreateTransaction({ open, onOpenChange }: DataTableModalProps) {
@@ -43,16 +42,8 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
   const { data: itemsResult, isPending: itemsPending } = useGetItems()
   const items = itemsResult?.data ?? []
 
-  const { control, handleSubmit, reset } = useForm<
-    StoreTransactionFormInput,
-    unknown,
-    StoreTransactionPayload
-  >({
-    resolver: zodResolver(StoreTransactionSchema as never) as Resolver<
-      StoreTransactionFormInput,
-      unknown,
-      StoreTransactionPayload
-    >,
+  const { control, handleSubmit, reset } = useForm<CreateTransactionFormData>({
+    resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
       type: 1,
       remarks: '',
@@ -65,7 +56,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
     name: 'transaction_items',
   })
 
-  const onSubmit = (data: StoreTransactionPayload) => {
+  const onSubmit = (data: CreateTransactionFormData) => {
     mutate(data, {
       onSuccess: () => {
         onOpenChange(false)
@@ -230,11 +221,20 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid} className="gap-1">
                               <Input
-                                type="text"
+                                type="number"
                                 inputMode="decimal"
+                                min={0.01}
+                                step="any"
                                 autoComplete="off"
                                 className="h-9"
-                                {...field}
+                                value={Number.isFinite(field.value) ? field.value : ''}
+                                onChange={(e) => {
+                                  const v = e.target.valueAsNumber
+                                  field.onChange(Number.isFinite(v) ? v : 0.01)
+                                }}
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                ref={field.ref}
                                 aria-invalid={fieldState.invalid}
                               />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

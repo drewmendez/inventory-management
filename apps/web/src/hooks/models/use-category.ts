@@ -1,5 +1,5 @@
 import type { QueryParams } from '@/types/api'
-import type { CategoryPayload } from '@/types/category'
+import type { CreateCategoryFormData, UpdateCategoryFormData } from '@/types/category'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
 import { createCategory, getCategories, getPaginatedCategories, updateCategory } from '@/services/category'
@@ -38,7 +38,7 @@ export const useCreateCategory = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CategoryPayload) => createCategory(data),
+    mutationFn: (data: CreateCategoryFormData) => createCategory(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['categories'] })
     },
@@ -49,7 +49,7 @@ export const useUpdateCategory = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ categoryId, data }: { categoryId: number; data: CategoryPayload }) =>
+    mutationFn: ({ categoryId, data }: { categoryId: number; data: UpdateCategoryFormData }) =>
       updateCategory(categoryId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['categories'] })
