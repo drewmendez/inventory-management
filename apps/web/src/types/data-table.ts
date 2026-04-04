@@ -1,4 +1,5 @@
 import type { UseQueryResult } from '@tanstack/react-query'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { ComponentType } from 'react'
 import type { PaginatedQueryResponse, QueryParams } from '@/types/api'
 
@@ -22,6 +23,7 @@ interface Column<T> {
   accessorKey: string
   accessorFn?: (row: T) => string
   isSortable?: boolean
+  cellFormat?: ColumnDef<T>['cell']
 }
 
 export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams> = (

@@ -1,6 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Transaction } from '@/types/transaction'
 import { DataTable } from '@/components/data-table'
+import { Badge } from '@/components/ui/badge'
 import { useGetPaginatedTransactions } from '@/hooks/models/use-transaction'
 import CreateTransaction from './components/create-transaction'
 import TypeFilter from './components/type-filter'
@@ -19,16 +20,21 @@ export default function Transactions() {
       {
         header: 'Type',
         accessorKey: 'type',
+        cellFormat: ({ row }) => (
+          <Badge variant={row.original.type === 'Stock In' ? 'success' : 'destructive'}>
+            {row.original.type}
+          </Badge>
+        ),
       },
       {
         header: 'Lines',
         accessorKey: 'transaction_items',
-        accessorFn: (row) => String(row.transaction_items.length),
+        cellFormat: ({ row }) => row.original.transaction_items.length,
       },
       {
         header: 'Remarks',
         accessorKey: 'remarks',
-        accessorFn: (row) => (row.remarks?.trim() ? row.remarks : '—'),
+        cellFormat: ({ row }) => (row.original.remarks?.trim() ? row.original.remarks : 'No remarks'),
       },
       {
         header: 'Recorded by',

@@ -76,6 +76,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
         header,
         accessorKey: column.accessorKey,
         ...(column.accessorFn ? { accessorFn: column.accessorFn } : {}),
+        ...(column.cellFormat ? { cell: column.cellFormat } : {}),
       }
     })
 

@@ -1,6 +1,7 @@
 import type { DataTableProps } from '@/types/data-table'
 import type { Item } from '@/types/item'
 import { DataTable } from '@/components/data-table'
+import { Badge } from '@/components/ui/badge'
 import { useGetPaginatedItems } from '@/hooks/models/use-item'
 import CategoryFilter from './components/category-filter'
 import CreateItem from './components/create-item'
@@ -37,6 +38,11 @@ export default function ItemInventories() {
       {
         header: 'Status',
         accessorKey: 'status',
+        cellFormat: (item) => (
+          <Badge variant={item.getValue() === 'Low Stock' ? 'destructive' : 'success'}>
+            {item.row.original.status}
+          </Badge>
+        ),
       },
       {
         header: 'Category',
@@ -45,7 +51,7 @@ export default function ItemInventories() {
       {
         header: 'Unit',
         accessorKey: 'unit.name',
-        accessorFn: (row) => `${row.unit.name} (${row.unit.symbol})`,
+        cellFormat: ({ row }) => `${row.original.unit.name} (${row.original.unit.symbol})`,
       },
       {
         header: 'Created At',
