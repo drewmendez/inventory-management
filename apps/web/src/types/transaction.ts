@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 const TransactionLineFormSchema = z.object({
   item_id: z.number().int().min(1, 'Select an item'),
-  quantity: z.number().min(0.01, 'Minimum quantity is 0.01'),
+  quantity: z.number().min(1, 'Minimum quantity is 1'),
 })
 
 export const TransactionFormSchema = z.object({

@@ -74,10 +74,17 @@ function CreateItemForm({
               <FieldLabel htmlFor="create-item-quantity">Quantity</FieldLabel>
               <Input
                 id="create-item-quantity"
-                type="text"
+                type="number"
                 inputMode="decimal"
                 autoComplete="off"
-                {...field}
+                name={field.name}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                value={Number.isFinite(field.value) ? String(field.value) : ''}
+                onChange={(e) => {
+                  const v = e.target.value
+                  field.onChange(v === '' ? 0 : Number.parseFloat(v))
+                }}
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -92,10 +99,17 @@ function CreateItemForm({
               <FieldLabel htmlFor="create-item-reorder">Reorder level</FieldLabel>
               <Input
                 id="create-item-reorder"
-                type="text"
+                type="number"
                 inputMode="decimal"
                 autoComplete="off"
-                {...field}
+                name={field.name}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                value={Number.isFinite(field.value) ? String(field.value) : ''}
+                onChange={(e) => {
+                  const v = e.target.value
+                  field.onChange(v === '' ? 0 : Number.parseFloat(v))
+                }}
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

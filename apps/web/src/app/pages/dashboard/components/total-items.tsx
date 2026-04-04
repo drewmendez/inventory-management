@@ -9,10 +9,10 @@ export function TotalItems() {
   const { data: total, isPending, isError } = useGetTotalItems()
 
   return (
-    <Card className="size-full border-l-7 border-l-primary">
-      <CardContent className="flex size-full flex-col justify-between">
+    <Card className="size-full min-w-0 border-l-7 border-l-primary">
+      <CardContent className="flex size-full min-h-0 flex-col justify-between gap-4">
         <div className="flex justify-between gap-2">
-          <BoxIcon className="size-15" />
+          <BoxIcon className="size-13 md:size-15" />
           <Button variant="outline" size="icon" asChild>
             <Link to="/dashboard/item-inventories">
               <ArrowUpRightIcon className="size-4" />
@@ -24,9 +24,9 @@ export function TotalItems() {
           {isPending ? (
             <Spinner className="size-7" />
           ) : isError ? (
-            <p className="text-[4rem] font-semibold">--</p>
+            <p className="font-semibold md:text-[4rem]">--</p>
           ) : (
-            <p className="text-[4rem] leading-none font-semibold tabular-nums">{total}</p>
+            <p className="text-5xl leading-none font-semibold tabular-nums md:text-[4rem]">{total}</p>
           )}
         </div>
       </CardContent>

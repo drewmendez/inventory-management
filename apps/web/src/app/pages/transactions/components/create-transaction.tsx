@@ -3,7 +3,7 @@ import type { Item } from '@/types/item'
 import type { CreateTransactionFormData } from '@/types/transaction'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
@@ -34,7 +34,7 @@ import { TransactionFormSchema } from '@/types/transaction'
 
 const defaultLine = (): CreateTransactionFormData['transaction_items'][number] => ({
   item_id: 0,
-  quantity: 0.01,
+  quantity: 0,
 })
 
 export default function CreateTransaction({ open, onOpenChange }: DataTableModalProps) {
@@ -56,6 +56,8 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
     name: 'transaction_items',
   })
 
+  const watchedLines = useWatch({ control, name: 'transaction_items' })
+
   const onSubmit = (data: CreateTransactionFormData) => {
     mutate(data, {
       onSuccess: () => {
@@ -73,9 +75,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
     <Dialog
       open={open}
       onOpenChange={(next) => {
-        if (next) {
-          resetMutation()
-        }
+        resetMutation()
         if (!next) {
           reset({
             type: 1,
@@ -168,7 +168,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[14rem]">Item</TableHead>
+                    <TableHead className="min-w-56">Item</TableHead>
                     <TableHead className="w-32">Quantity</TableHead>
                     <TableHead className="w-12 text-center"> </TableHead>
                   </TableRow>
@@ -181,11 +181,20 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
                           name={`transaction_items.${index}.item_id`}
                           control={control}
                           render={({ field, fieldState }) => {
-                            const selected = items.find((i) => i.id === field.value) ?? null
+                            const takenElsewhere = new Set<number>()
+                            watchedLines?.forEach((line, i) => {
+                              if (i !== index && line && line.item_id > 0) {
+                                takenElsewhere.add(line.item_id)
+                              }
+                            })
+                            const lineItems = items.filter(
+                              (item) => !takenElsewhere.has(item.id) || item.id === field.value,
+                            )
+                            const selected = lineItems.find((i) => i.id === field.value) ?? null
                             return (
                               <Field data-invalid={fieldState.invalid} className="gap-1">
                                 <Combobox
-                                  items={items}
+                                  items={lineItems}
                                   value={selected}
                                   onValueChange={(item: Item | null) => field.onChange(item?.id ?? 0)}
                                   itemToStringLabel={(i) => (i ? `${i.sku} — ${i.name}` : '')}
@@ -223,18 +232,16 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
                               <Input
                                 type="number"
                                 inputMode="decimal"
-                                min={0.01}
-                                step="any"
                                 autoComplete="off"
                                 className="h-9"
-                                value={Number.isFinite(field.value) ? field.value : ''}
-                                onChange={(e) => {
-                                  const v = e.target.valueAsNumber
-                                  field.onChange(Number.isFinite(v) ? v : 0.01)
-                                }}
-                                onBlur={field.onBlur}
                                 name={field.name}
                                 ref={field.ref}
+                                onBlur={field.onBlur}
+                                value={Number.isFinite(field.value) ? String(field.value) : ''}
+                                onChange={(e) => {
+                                  const v = e.target.value
+                                  field.onChange(v === '' ? 0 : Number.parseFloat(v))
+                                }}
                                 aria-invalid={fieldState.invalid}
                               />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

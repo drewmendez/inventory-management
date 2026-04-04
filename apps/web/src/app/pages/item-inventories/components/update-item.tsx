@@ -99,10 +99,16 @@ export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModa
                     <FieldLabel htmlFor="update-item-reorder">Reorder level</FieldLabel>
                     <Input
                       id="update-item-reorder"
-                      type="text"
-                      inputMode="decimal"
+                      type="number"
                       autoComplete="off"
-                      {...field}
+                      name={field.name}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
+                      value={Number.isFinite(field.value) ? String(field.value) : ''}
+                      onChange={(e) => {
+                        const v = e.target.value
+                        field.onChange(v === '' ? 0 : Number.parseFloat(v))
+                      }}
                       aria-invalid={fieldState.invalid}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

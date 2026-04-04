@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
-    <ScrollArea className="size-full min-h-0 rounded-md border">
+    <ScrollArea className="size-full min-h-0 min-w-0 rounded-md border">
       <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

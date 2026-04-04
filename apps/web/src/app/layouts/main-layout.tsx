@@ -72,7 +72,7 @@ export default function MainLayout() {
             </Button>
           </div>
         </header>
-        <div className="max-h-[calc(100vh-5rem)] flex-1 p-4">
+        <div className="max-h-[calc(100vh-5rem)] min-h-0 min-w-0 flex-1 p-4">
           <Outlet />
         </div>
       </SidebarInset>

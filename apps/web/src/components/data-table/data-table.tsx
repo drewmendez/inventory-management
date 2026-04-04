@@ -67,7 +67,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             {ViewRowAction && (
               <Button
                 variant="info"
-                className="h-8 w-8 p-0"
+                className="size-8 p-0"
                 aria-label="View row"
                 onClick={() => setViewRow(row.original)}
               >
@@ -77,7 +77,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             {UpdateRowAction && (
               <Button
                 variant="warn"
-                className="h-8 w-8 p-0"
+                className="size-8 p-0"
                 aria-label="Update row"
                 onClick={() => setUpdateRow(row.original)}
               >
@@ -88,7 +88,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
               <Button
                 type="button"
                 variant="outline"
-                className="h-8 w-8 p-0"
+                className="size-8 p-0"
                 aria-label={row.getIsExpanded() ? 'Collapse row details' : 'Expand row details'}
                 aria-expanded={row.getIsExpanded()}
                 onClick={() => row.toggleExpanded()}
@@ -128,11 +128,11 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const filtersConfig = dataTable.filters
 
   return (
-    <Card className="size-full gap-3">
+    <Card className="size-full min-w-0 gap-3">
       <CardHeader>
         <CardTitle className="text-xl">{dataTable.title}</CardTitle>
       </CardHeader>
-      <CardContent className="flex size-full min-h-0 flex-col gap-3">
+      <CardContent className="flex size-full min-h-0 min-w-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
           <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
             <Search onDebouncedSearchChange={setSearchQuery} />
@@ -160,7 +160,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
                   <TableHead
                     key={header.id}
                     className={cn('bg-primary px-6 text-primary-foreground', {
-                      'sticky right-0 min-w-35 text-center': header.id === 'actions',
+                      'sticky right-0 text-center': header.id === 'actions',
                     })}
                   >
                     {header.isPlaceholder

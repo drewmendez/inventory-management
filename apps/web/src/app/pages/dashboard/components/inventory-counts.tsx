@@ -22,6 +22,7 @@ export function InventoryCounts() {
       {
         header: 'Quantity',
         accessorKey: 'quantity',
+        isSortable: true,
       },
       {
         header: 'Unit',
