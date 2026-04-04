@@ -2,7 +2,7 @@ import type { QueryParams } from '@/types/api'
 import type { CreateItemPayload, UpdateItemPayload } from '@/types/item'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { buildQueryString } from '@/lib/utils'
-import { createItem, getItems, updateItem } from '@/services/item'
+import { createItem, getItems, getItemsTotalCount, updateItem } from '@/services/item'
 
 export const useGetItems = (params: QueryParams) => {
   const queryString = buildQueryString(params)
@@ -19,6 +19,14 @@ export const useGetItems = (params: QueryParams) => {
       filtersKey,
     ],
     queryFn: () => getItems(queryString),
+  })
+}
+
+export const useTotalItems = () => {
+  return useQuery({
+    queryKey: ['items', 'total-count'],
+    queryFn: getItemsTotalCount,
+    staleTime: 60_000,
   })
 }
 

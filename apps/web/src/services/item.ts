@@ -16,6 +16,12 @@ export const getItems = async (queryString: string) => {
   return jsonData
 }
 
+export const getItemsTotalCount = async () => {
+  const params = new URLSearchParams({ page: '1', per_page: '10' })
+  const { paginator_info } = await getItems(params.toString())
+  return paginator_info.total
+}
+
 export const createItem = async (payload: CreateItemPayload) => {
   const response = await api('/api/items', {
     method: 'POST',
