@@ -1,7 +1,7 @@
 import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon, RefreshCcwIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
@@ -21,7 +21,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [createOpen, setCreateOpen] = useState(false)
 
   const primarySort = sorting[0]
-  const { data, isPending } = dataTable.query({
+  const { data, refetch, isPending, isFetching } = dataTable.query({
     page: pagination.pageIndex + 1,
     perPage: pagination.pageSize,
     sortBy: primarySort?.id,
@@ -62,8 +62,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           <div className="flex items-center justify-center gap-2">
             {ViewRowAction && (
               <Button
-                type="button"
-                variant="outline"
+                variant="info"
                 className="h-8 w-8 p-0"
                 aria-label="View row"
                 onClick={() => setViewRow(row.original)}
@@ -73,8 +72,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             )}
             {UpdateRowAction && (
               <Button
-                type="button"
-                variant="outline"
+                variant="warn"
                 className="h-8 w-8 p-0"
                 aria-label="Update row"
                 onClick={() => setUpdateRow(row.original)}
@@ -109,33 +107,33 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     <Card className="size-full gap-3">
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
-          {filtersConfig ? (
+          {filtersConfig && (
             <SearchFilters
               filters={filtersConfig}
               onDebouncedSearchChange={setSearchQuery}
               onFiltersChange={setAppliedFilters}
               onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
             />
-          ) : null}
-          {CreateAction ? (
-            <Button
-              type="button"
-              className="ml-auto inline-flex shrink-0 items-center gap-2 py-5"
-              onClick={() => setCreateOpen(true)}
-            >
-              <PlusIcon className="size-4" />
-              Add
+          )}
+          <div className="ml-auto space-x-2">
+            <Button variant="info" size="icon-lg" onClick={() => refetch()}>
+              <RefreshCcwIcon className="size-4" />
             </Button>
-          ) : null}
+            {CreateAction && (
+              <Button variant="success" size="icon-lg" onClick={() => setCreateOpen(true)}>
+                <PlusIcon className="size-4" />
+              </Button>
+            )}
+          </div>
         </div>
         <Table>
-          <TableHeader>
+          <TableHeader className="h-14">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="sticky top-0 z-10">
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={cn('bg-primary px-6 py-2 text-primary-foreground', {
+                    className={cn('bg-primary px-6 text-primary-foreground', {
                       'sticky right-0 min-w-35 text-center': header.id === 'actions',
                     })}
                   >
@@ -149,7 +147,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           </TableHeader>
 
           <TableBody>
-            {isPending ? (
+            {isPending || isFetching ? (
               Array.from({ length: pagination.pageSize }, (_, rowIndex) => (
                 <TableRow key={`skeleton-${rowIndex}`}>
                   {Array.from({ length: columnDefs.length }, (_, cellIndex) => (
@@ -161,7 +159,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
               ))
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className="h-12">
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

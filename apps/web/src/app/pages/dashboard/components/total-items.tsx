@@ -9,7 +9,7 @@ export function TotalItems() {
   const { data: total, isPending, isError } = useGetTotalItems()
 
   return (
-    <Card className="size-full">
+    <Card className="size-full border-l-7 border-l-primary">
       <CardContent className="flex size-full flex-col justify-between">
         <div className="flex justify-between gap-2">
           <BoxIcon className="size-15" />

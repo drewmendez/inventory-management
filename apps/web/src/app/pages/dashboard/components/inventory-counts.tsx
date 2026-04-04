@@ -22,6 +22,11 @@ export function InventoryCounts() {
         header: 'Quantity',
         accessorKey: 'quantity',
       },
+      {
+        header: 'Unit',
+        accessorKey: 'unit.name',
+        cellFormat: ({ row }) => `${row.original.unit.name} (${row.original.unit.symbol})`,
+      },
     ],
     filters: {
       search: true,

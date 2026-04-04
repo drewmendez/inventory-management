@@ -24,7 +24,7 @@ export function LowStockItems() {
   const canNext = page < lastPage
 
   return (
-    <Card className="size-full">
+    <Card className="size-full border-l-7 border-l-primary">
       <CardContent className="flex size-full min-h-0 flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-6">
         <div className="flex shrink-0 flex-col justify-between gap-3 sm:max-w-44">
           <TriangleAlertIcon className="size-15" aria-hidden />
