@@ -74,9 +74,9 @@ class TransactionService
                 if ($type === 2 && $delta > $current) {
                     throw ValidationException::withMessages([
                         "transaction_items.$index.quantity" => sprintf(
-                            'Requested quantity %.2f exceeds available stock %.2f for item %s.',
-                            $delta,
-                            $current,
+                            'Requested quantity %s exceeds available stock %s for item %s.',
+                            self::formatDecimal($delta),
+                            self::formatDecimal($current),
                             $item->name
                         ),
                     ]);
@@ -104,6 +104,16 @@ class TransactionService
 
             return $transaction->fresh(['user.role', 'transactionItems.item.category', 'transactionItems.item.unit']);
         });
+    }
+
+    private static function formatDecimal(float $value): string
+    {
+        $str = rtrim(rtrim(sprintf('%.12F', $value), '0'), '.');
+
+        return match ($str) {
+            '', '-0', '-0.' => '0',
+            default => $str,
+        };
     }
 
     private function generateReferenceNumber(int $type): string
