@@ -9,7 +9,6 @@ use App\Http\Requests\Item\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Services\ItemService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -22,9 +21,7 @@ class ItemController extends Controller
     {
         $result = $this->itemService->getItems($request->validated());
 
-        return ItemResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(ItemResource::collection($result['data']), $result);
     }
 
     /**

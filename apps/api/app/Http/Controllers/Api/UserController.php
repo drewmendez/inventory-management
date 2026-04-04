@@ -22,9 +22,7 @@ class UserController extends Controller
     {
         $result = $this->userService->getUsers($request->validated());
 
-        return UserResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(UserResource::collection($result['data']), $result);
     }
 
     /**

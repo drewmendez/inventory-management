@@ -10,7 +10,6 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -23,9 +22,7 @@ class CategoryController extends Controller
     {
         $result = $this->categoryService->getCategories($request->validated());
 
-        return CategoryResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(CategoryResource::collection($result['data']), $result);
     }
 
     /**

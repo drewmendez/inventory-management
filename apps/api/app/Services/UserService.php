@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Helpers\PaginatorInfo;
+use App\Helpers\ListingQuery;
 use App\Models\User;
 
 class UserService
@@ -42,12 +42,9 @@ class UserService
             $query->where('role_id', $filters['role_id']);
         }
 
-        $paginator = $query->with(['role'])->paginate($perPage, ['*'], 'page', $page);
+        $query->with(['role']);
 
-        return [
-            'data' => $paginator->items(),
-            'paginator_info' => PaginatorInfo::from($paginator),
-        ];
+        return ListingQuery::paginateOrAll($query, $filters);
     }
 
     public function updateUser(User $user, array $data): User

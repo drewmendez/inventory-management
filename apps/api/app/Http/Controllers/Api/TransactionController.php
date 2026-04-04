@@ -21,9 +21,7 @@ class TransactionController extends Controller
     {
         $result = $this->transactionService->getTransactions($request->validated());
 
-        return TransactionResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(TransactionResource::collection($result['data']), $result);
     }
 
     /**

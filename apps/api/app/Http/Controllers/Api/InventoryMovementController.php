@@ -20,9 +20,7 @@ class InventoryMovementController extends Controller
     {
         $result = $this->inventoryMovementService->getInventoryMovements($request->validated());
 
-        return InventoryMovementResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(InventoryMovementResource::collection($result['data']), $result);
     }
 
     /**

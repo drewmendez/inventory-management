@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Helpers\PaginatorInfo;
+use App\Helpers\ListingQuery;
 use App\Models\Unit;
 
 class UnitService
@@ -13,13 +13,10 @@ class UnitService
     ];
 
     /**
-     * @return array{data: list<Unit>, paginator_info: array{current_page: int, last_page: int, per_page: int, total: int}}
+     * @return array{data: list<Unit>, paginator_info?: array{current_page: int, last_page: int, per_page: int, total: int}}
      */
     public function getUnits(array $filters): array
     {
-        $page = $filters['page'] ?? 1;
-        $perPage = $filters['per_page'] ?? 25;
-
         $query = Unit::query();
 
         $search = trim((string) ($filters['search'] ?? ''));
@@ -36,12 +33,7 @@ class UnitService
             $query->orderBy('created_at', 'desc');
         }
 
-        $paginator = $query->paginate($perPage, ['*'], 'page', $page);
-
-        return [
-            'data' => $paginator->items(),
-            'paginator_info' => PaginatorInfo::from($paginator),
-        ];
+        return ListingQuery::paginateOrAll($query, $filters);
     }
 
     public function createUnit(array $data): Unit

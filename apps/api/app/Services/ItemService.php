@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Helpers\PaginatorInfo;
+use App\Helpers\ListingQuery;
 use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +15,10 @@ class ItemService
     ];
 
     /**
-     * @return array{data: list<Item>, paginator_info: array{current_page: int, last_page: int, per_page: int, total: int}}
+     * @return array{data: list<Item>, paginator_info?: array{current_page: int, last_page: int, per_page: int, total: int}}
      */
     public function getItems(array $filters): array
     {
-        $page = $filters['page'] ?? 1;
-        $perPage = $filters['per_page'] ?? 25;
-
         $query = Item::query();
 
         $search = trim((string) ($filters['search'] ?? ''));
@@ -53,12 +50,9 @@ class ItemService
             };
         }
 
-        $paginator = $query->with(['category', 'unit'])->paginate($perPage, ['*'], 'page', $page);
+        $query->with(['category', 'unit']);
 
-        return [
-            'data' => $paginator->items(),
-            'paginator_info' => PaginatorInfo::from($paginator),
-        ];
+        return ListingQuery::paginateOrAll($query, $filters);
     }
 
     public function createItem(array $data): Item

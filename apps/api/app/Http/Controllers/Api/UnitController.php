@@ -10,7 +10,6 @@ use App\Http\Resources\UnitResource;
 use App\Models\Unit;
 use App\Services\UnitService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
@@ -23,9 +22,7 @@ class UnitController extends Controller
     {
         $result = $this->unitService->getUnits($request->validated());
 
-        return UnitResource::collection($result['data'])
-            ->additional(['paginator_info' => $result['paginator_info']])
-            ->response();
+        return $this->listingResponse(UnitResource::collection($result['data']), $result);
     }
 
     /**

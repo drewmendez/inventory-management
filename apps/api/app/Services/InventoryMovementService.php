@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Helpers\PaginatorInfo;
+use App\Helpers\ListingQuery;
 use App\Models\InventoryMovement;
 
 class InventoryMovementService
@@ -33,14 +33,11 @@ class InventoryMovementService
 
         $query->orderBy('created_at', 'desc');
 
-        $paginator = $query->with([
+        $query->with([
             'transactionItem.item.category',
             'transactionItem.item.unit',
-        ])->paginate($perPage, ['*'], 'page', $page);
+        ]);
 
-        return [
-            'data' => $paginator->items(),
-            'paginator_info' => PaginatorInfo::from($paginator),
-        ];
+        return ListingQuery::paginateOrAll($query, $filters);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Helpers\PaginatorInfo;
+use App\Helpers\ListingQuery;
 use App\Models\InventoryMovement;
 use App\Models\Item;
 use App\Models\Transaction;
@@ -18,13 +18,10 @@ class TransactionService
     ];
 
     /**
-     * @return array{data: list<Transaction>, paginator_info: array{current_page: int, last_page: int, per_page: int, total: int}}
+     * @return array{data: list<Transaction>, paginator_info?: array{current_page: int, last_page: int, per_page: int, total: int}}
      */
     public function getTransactions(array $filters): array
     {
-        $page = $filters['page'] ?? 1;
-        $perPage = $filters['per_page'] ?? 25;
-
         $query = Transaction::query();
 
         $search = trim((string) ($filters['search'] ?? ''));
@@ -45,16 +42,13 @@ class TransactionService
             $query->where('type', $filters['type']);
         }
 
-        $paginator = $query->with([
+        $query->with([
             'user.role',
             'transactionItems.item.category',
             'transactionItems.item.unit',
-        ])->paginate($perPage, ['*'], 'page', $page);
+        ]);
 
-        return [
-            'data' => $paginator->items(),
-            'paginator_info' => PaginatorInfo::from($paginator),
-        ];
+        return ListingQuery::paginateOrAll($query, $filters);
     }
 
     public function createTransaction(array $data, User $user): Transaction
