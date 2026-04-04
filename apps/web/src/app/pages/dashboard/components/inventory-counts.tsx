@@ -30,7 +30,6 @@ export function InventoryCounts() {
       },
     ],
     filters: {
-      search: true,
       category_id: CategoryFilter,
       unit_id: UnitFilter,
       status: StatusFilter,

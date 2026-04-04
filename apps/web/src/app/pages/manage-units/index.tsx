@@ -32,9 +32,6 @@ export default function ManageUnits() {
         isSortable: true,
       },
     ],
-    filters: {
-      search: true,
-    },
     tableActions: {
       create: CreateUnit,
     },

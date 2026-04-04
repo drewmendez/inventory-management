@@ -49,9 +49,6 @@ export default function InventoryLogs() {
         accessorKey: 'created_at',
       },
     ],
-    filters: {
-      search: true,
-    },
   } satisfies DataTableProps<InventoryMovement>
 
   return <DataTable dataTable={dataTable} />

@@ -5,7 +5,6 @@ import type { PaginatedQueryResponse, QueryParams } from '@/types/api'
 
 export interface DataTableFilterProps {
   value: string
-  /** `selectionLabel` is the human-readable chip text (e.g. category name). Omit when clearing. */
   onValueChange: (value: string, selectionLabel?: string) => void
 }
 
@@ -41,11 +40,5 @@ export interface DataTableProps<TData, TParams extends QueryParams = QueryParams
     view?: ComponentType<DataTableRowModalProps<TData>>
     update?: ComponentType<DataTableRowModalProps<TData>>
   }
-  /**
-   * `search` enables the search field; other keys are filter field components.
-   * @example `{ search: true, category_id: CategoryFilter }`
-   */
-  filters?: Record<string, ComponentType<DataTableFilterProps> | boolean | undefined> & {
-    search: boolean
-  }
+  filters?: Record<string, ComponentType<DataTableFilterProps>>
 }

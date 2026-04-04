@@ -65,7 +65,6 @@ export default function ItemInventories() {
       },
     ],
     filters: {
-      search: true,
       category_id: CategoryFilter,
       unit_id: UnitFilter,
       status: StatusFilter,

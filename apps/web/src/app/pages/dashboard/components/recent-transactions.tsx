@@ -43,7 +43,6 @@ export function RecentTransactions() {
       },
     ],
     filters: {
-      search: true,
       type: TypeFilter,
     },
   } satisfies DataTableProps<Transaction>

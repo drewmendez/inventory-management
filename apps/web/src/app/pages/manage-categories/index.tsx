@@ -32,9 +32,6 @@ export default function ManageCategories() {
         isSortable: true,
       },
     ],
-    filters: {
-      search: true,
-    },
     tableActions: {
       create: CreateCategory,
     },

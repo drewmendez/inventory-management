@@ -48,7 +48,6 @@ export default function ManageUsers() {
       },
     ],
     filters: {
-      search: true,
       role_id: RoleFilter,
     },
     rowActions: {

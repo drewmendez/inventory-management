@@ -8,8 +8,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
+import { Filters } from './filters'
 import Paginator from './paginator'
-import SearchFilters from './search-filters'
+import { Search } from './search'
 
 export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TData> }) {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 25 })
@@ -110,14 +111,16 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
       </CardHeader>
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
-          {filtersConfig && (
-            <SearchFilters
-              filters={filtersConfig}
-              onDebouncedSearchChange={setSearchQuery}
-              onFiltersChange={setAppliedFilters}
-              onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
-            />
-          )}
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+            <Search onDebouncedSearchChange={setSearchQuery} />
+            {filtersConfig ? (
+              <Filters
+                config={filtersConfig}
+                onFiltersChange={setAppliedFilters}
+                onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
+              />
+            ) : null}
+          </div>
           <div className="ml-auto space-x-2">
             {CreateAction && (
               <Button variant="success" size="icon-lg" onClick={() => setCreateOpen(true)}>
