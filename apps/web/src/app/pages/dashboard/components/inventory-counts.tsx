@@ -9,7 +9,6 @@ import { useGetPaginatedItems } from '@/hooks/models/use-item'
 export function InventoryCounts() {
   const dataTable = {
     query: useGetPaginatedItems,
-    createActionLabel: 'Add item',
     columns: [
       {
         header: 'SKU',
@@ -25,6 +24,7 @@ export function InventoryCounts() {
       },
     ],
     filters: {
+      search: true,
       category_id: CategoryFilter,
       unit_id: UnitFilter,
       status: StatusFilter,

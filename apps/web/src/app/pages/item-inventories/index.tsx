@@ -13,7 +13,6 @@ import ViewItem from './components/view-item'
 export default function ItemInventories() {
   const dataTable = {
     query: useGetPaginatedItems,
-    createActionLabel: 'Add item',
     columns: [
       {
         header: 'SKU',
@@ -65,13 +64,16 @@ export default function ItemInventories() {
       },
     ],
     filters: {
+      search: true,
       category_id: CategoryFilter,
       unit_id: UnitFilter,
       status: StatusFilter,
     },
-    crud: {
-      view: ViewItem,
+    tableActions: {
       create: CreateItem,
+    },
+    rowActions: {
+      view: ViewItem,
       update: UpdateItem,
     },
   } satisfies DataTableProps<Item>

@@ -9,7 +9,6 @@ import ViewUnit from './components/view-unit'
 export default function ManageUnits() {
   const dataTable = {
     query: useGetPaginatedUnits,
-    createActionLabel: 'Add unit',
     columns: [
       {
         header: 'Name',
@@ -32,9 +31,14 @@ export default function ManageUnits() {
         isSortable: true,
       },
     ],
-    crud: {
-      view: ViewUnit,
+    filters: {
+      search: true,
+    },
+    tableActions: {
       create: CreateUnit,
+    },
+    rowActions: {
+      view: ViewUnit,
       update: UpdateUnit,
     },
   } satisfies DataTableProps<Unit>

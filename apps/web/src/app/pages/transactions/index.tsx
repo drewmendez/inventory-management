@@ -10,7 +10,6 @@ import ViewTransaction from './components/view-transaction'
 export default function Transactions() {
   const dataTable = {
     query: useGetPaginatedTransactions,
-    createActionLabel: 'Add transaction',
     columns: [
       {
         header: 'Reference',
@@ -47,11 +46,14 @@ export default function Transactions() {
       },
     ],
     filters: {
+      search: true,
       type: TypeFilter,
     },
-    crud: {
-      view: ViewTransaction,
+    tableActions: {
       create: CreateTransaction,
+    },
+    rowActions: {
+      view: ViewTransaction,
     },
   } satisfies DataTableProps<Transaction>
 

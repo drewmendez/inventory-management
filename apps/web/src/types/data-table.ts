@@ -33,11 +33,18 @@ export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams>
 export interface DataTableProps<TData, TParams extends QueryParams = QueryParams> {
   columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
-  createActionLabel?: string
-  filters?: Record<string, ComponentType<DataTableFilterProps>>
-  crud?: {
-    view?: ComponentType<DataTableRowModalProps<TData>>
+  tableActions?: {
     create?: ComponentType<DataTableModalProps>
+  }
+  rowActions?: {
+    view?: ComponentType<DataTableRowModalProps<TData>>
     update?: ComponentType<DataTableRowModalProps<TData>>
+  }
+  /**
+   * `search` enables the search field; other keys are filter field components.
+   * @example `{ search: true, category_id: CategoryFilter }`
+   */
+  filters?: Record<string, ComponentType<DataTableFilterProps> | boolean | undefined> & {
+    search: boolean
   }
 }

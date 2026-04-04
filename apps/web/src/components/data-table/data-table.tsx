@@ -2,7 +2,7 @@ import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/r
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -30,43 +30,13 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     filters: appliedFilters,
   })
 
-  const ViewCrud = dataTable.crud?.view
-  const CreateCrud = dataTable.crud?.create
-  const UpdateCrud = dataTable.crud?.update
+  const ViewRowAction = dataTable.rowActions?.view
+  const UpdateRowAction = dataTable.rowActions?.update
+  const hasRowActions = Boolean(ViewRowAction || UpdateRowAction)
+  const CreateAction = dataTable.tableActions?.create
 
-  const getColumns = (): ColumnDef<TData>[] => {
-    const actionsColumn: ColumnDef<TData> = {
-      id: 'actions',
-      header: 'Actions',
-      cell: ({ row }) => {
-        return (
-          <div className="flex items-center justify-center gap-2">
-            {ViewCrud && (
-              <Button
-                type="button"
-                variant="outline"
-                className="h-8 w-8 p-0"
-                onClick={() => setViewRow(row.original)}
-              >
-                <EyeIcon />
-              </Button>
-            )}
-            {UpdateCrud && (
-              <Button
-                type="button"
-                variant="outline"
-                className="h-8 w-8 p-0"
-                onClick={() => setUpdateRow(row.original)}
-              >
-                <Edit />
-              </Button>
-            )}
-          </div>
-        )
-      },
-    }
-
-    const columns: ColumnDef<TData>[] = dataTable.columns.map((column) => {
+  const columnDefs = useMemo((): ColumnDef<TData>[] => {
+    const dataColumns: ColumnDef<TData>[] = dataTable.columns.map((column) => {
       const sortableHeader = ({ column: tableColumn }: HeaderContext<TData, unknown>) => (
         <SortableHeader column={tableColumn} columnHeader={column.header} />
       )
@@ -80,11 +50,48 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
       }
     })
 
-    return [...columns, actionsColumn]
-  }
+    if (!hasRowActions) {
+      return dataColumns
+    }
+
+    const actionsColumn: ColumnDef<TData> = {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center justify-center gap-2">
+            {ViewRowAction && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-8 w-8 p-0"
+                aria-label="View row"
+                onClick={() => setViewRow(row.original)}
+              >
+                <EyeIcon />
+              </Button>
+            )}
+            {UpdateRowAction && (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-8 w-8 p-0"
+                aria-label="Update row"
+                onClick={() => setUpdateRow(row.original)}
+              >
+                <Edit />
+              </Button>
+            )}
+          </div>
+        )
+      },
+    }
+
+    return [...dataColumns, actionsColumn]
+  }, [dataTable.columns, hasRowActions, ViewRowAction, UpdateRowAction])
 
   const table = useReactTable({
-    columns: getColumns(),
+    columns: columnDefs,
     data: data?.data ?? [],
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
@@ -96,26 +103,30 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
     state: { pagination, sorting },
   })
 
+  const filtersConfig = dataTable.filters
+
   return (
     <Card className="size-full gap-3">
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
-          <SearchFilters
-            filters={dataTable.filters}
-            onDebouncedSearchChange={setSearchQuery}
-            onFiltersChange={setAppliedFilters}
-            onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
-          />
-          {CreateCrud && (
+          {filtersConfig ? (
+            <SearchFilters
+              filters={filtersConfig}
+              onDebouncedSearchChange={setSearchQuery}
+              onFiltersChange={setAppliedFilters}
+              onFilterPageReset={() => setPagination((p) => ({ ...p, pageIndex: 0 }))}
+            />
+          ) : null}
+          {CreateAction ? (
             <Button
               type="button"
               className="ml-auto inline-flex shrink-0 items-center gap-2 py-5"
               onClick={() => setCreateOpen(true)}
             >
               <PlusIcon className="size-4" />
-              {dataTable.createActionLabel ?? 'Add'}
+              Add
             </Button>
-          )}
+          ) : null}
         </div>
         <Table>
           <TableHeader>
@@ -141,7 +152,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             {isPending ? (
               Array.from({ length: pagination.pageSize }, (_, rowIndex) => (
                 <TableRow key={`skeleton-${rowIndex}`}>
-                  {Array.from({ length: getColumns().length }, (_, cellIndex) => (
+                  {Array.from({ length: columnDefs.length }, (_, cellIndex) => (
                     <TableCell key={cellIndex}>
                       <Skeleton className="my-2 h-4 w-full" />
                     </TableCell>
@@ -165,7 +176,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={getColumns().length} className="h-24 text-center">
+                <TableCell colSpan={columnDefs.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -178,8 +189,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
         <Paginator table={table} />
       </CardFooter>
 
-      {ViewCrud && viewRow !== null && (
-        <ViewCrud
+      {ViewRowAction && viewRow !== null && (
+        <ViewRowAction
           row={viewRow}
           open
           onOpenChange={(open) => {
@@ -190,8 +201,8 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
         />
       )}
 
-      {UpdateCrud && updateRow !== null && (
-        <UpdateCrud
+      {UpdateRowAction && updateRow !== null && (
+        <UpdateRowAction
           key={String((updateRow as { id: string | number }).id)}
           row={updateRow}
           open
@@ -203,7 +214,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
         />
       )}
 
-      {CreateCrud && <CreateCrud open={createOpen} onOpenChange={setCreateOpen} />}
+      {CreateAction ? <CreateAction open={createOpen} onOpenChange={setCreateOpen} /> : null}
     </Card>
   )
 }

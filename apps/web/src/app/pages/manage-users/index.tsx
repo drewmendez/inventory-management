@@ -47,9 +47,10 @@ export default function ManageUsers() {
       },
     ],
     filters: {
+      search: true,
       role_id: RoleFilter,
     },
-    crud: {
+    rowActions: {
       view: ViewUser,
       update: UpdateUser,
     },

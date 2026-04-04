@@ -1,26 +1,36 @@
 import type { ComponentType } from 'react'
-import type { DataTableFilterProps } from '@/types/data-table'
+import type { DataTableFilterProps, DataTableProps } from '@/types/data-table'
 import { CheckIcon, FilterIcon, XIcon } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group'
+import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from '@/components/ui/popover'
 import { useDebounce } from '@/hooks/use-debounce'
+import { cn } from '@/lib/utils'
 
-interface DataTableSearchFiltersProps {
-  filters?: Record<string, ComponentType<DataTableFilterProps>>
+type FiltersConfig = NonNullable<DataTableProps<unknown>['filters']>
+
+function getFilterComponentEntries(filters: FiltersConfig): [string, ComponentType<DataTableFilterProps>][] {
+  return Object.entries(filters).filter(
+    (entry): entry is [string, ComponentType<DataTableFilterProps>] =>
+      entry[0] !== 'search' && typeof entry[1] === 'function',
+  )
+}
+
+interface SearchFiltersProps {
+  filters: FiltersConfig
   onDebouncedSearchChange: (search: string) => void
   onFiltersChange: (filters: Record<string, string> | undefined) => void
   onFilterPageReset: () => void
 }
 
 export default function SearchFilters({
-  filters: filterComponents,
+  filters: filtersConfig,
   onDebouncedSearchChange,
   onFiltersChange,
   onFilterPageReset,
-}: DataTableSearchFiltersProps) {
+}: SearchFiltersProps) {
   const [searchInput, setSearchInput] = useState('')
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false)
@@ -29,13 +39,11 @@ export default function SearchFilters({
   const [draftFilterOptionLabels, setDraftFilterOptionLabels] = useState<Record<string, string>>({})
 
   const debouncedSearch = useDebounce(searchInput)
+  const searchEnabled = filtersConfig.search
 
-  const filterEntries = filterComponents ? Object.entries(filterComponents) : []
-  const filterKeys = useMemo(
-    () => (filterComponents ? Object.keys(filterComponents) : []),
-    [filterComponents],
-  )
-  const hasFilters = filterKeys.length > 0
+  const filterEntries = useMemo(() => getFilterComponentEntries(filtersConfig), [filtersConfig])
+  const filterKeys = useMemo(() => filterEntries.map(([key]) => key), [filterEntries])
+  const hasFilterFields = filterEntries.length > 0
 
   const appliedFilters = useMemo(() => {
     const out: Record<string, string> = {}
@@ -50,8 +58,12 @@ export default function SearchFilters({
   const onDebouncedSearchChangeRef = useRef(onDebouncedSearchChange)
   onDebouncedSearchChangeRef.current = onDebouncedSearchChange
   useEffect(() => {
-    onDebouncedSearchChangeRef.current(debouncedSearch.trim())
-  }, [debouncedSearch])
+    if (searchEnabled) {
+      onDebouncedSearchChangeRef.current(debouncedSearch.trim())
+    } else {
+      onDebouncedSearchChangeRef.current('')
+    }
+  }, [debouncedSearch, searchEnabled])
 
   const onFiltersChangeRef = useRef(onFiltersChange)
   onFiltersChangeRef.current = onFiltersChange
@@ -134,21 +146,44 @@ export default function SearchFilters({
       }))
   }, [filterKeys, filterValues, filterOptionLabels])
 
+  const showSearch = searchEnabled
+  const showFilters = hasFilterFields
+
+  if (!showSearch && !showFilters) {
+    return null
+  }
+
   return (
-    <InputGroup className="h-auto min-h-11 max-w-3xl min-w-48 flex-1">
-      <InputGroupInput
-        type="search"
-        placeholder="Search"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        className="min-w-0 py-5"
-      />
-      {hasFilters ? (
+    <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+      {showSearch && (
+        <Input
+          type="search"
+          placeholder="Search"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="max-w-md flex-1 py-5"
+          aria-label="Search table"
+        />
+      )}
+      {showFilters && (
         <Popover open={filterPopoverOpen} onOpenChange={handleFilterPopoverOpenChange}>
-          <InputGroupAddon
-            align="inline-end"
-            className="max-w-[min(100%,24rem)] flex-wrap justify-end gap-1 border-border/60 py-1"
+          <div
+            className={cn(
+              'flex max-w-full flex-wrap items-center justify-start gap-1 rounded-md border border-border/60 px-1.5 py-1',
+              !showSearch && 'flex-1',
+            )}
           >
+            <PopoverTrigger asChild>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                className="size-8 shrink-0 text-muted-foreground"
+                aria-label="Open table filters"
+                aria-expanded={filterPopoverOpen}
+              >
+                <FilterIcon className="size-4" />
+              </Button>
+            </PopoverTrigger>
             {activeFilterChips.map(({ key, name }) => (
               <Badge
                 key={key}
@@ -159,24 +194,14 @@ export default function SearchFilters({
                   type="button"
                   className="inline-flex max-w-full min-w-0 cursor-pointer items-center gap-0.5 outline-none"
                   onClick={() => removeFilter(key)}
+                  aria-label={`Remove filter ${name}`}
                 >
                   <span className="min-w-0 truncate">{name}</span>
-                  <XIcon className="size-2.5 shrink-0 opacity-70" />
+                  <XIcon className="size-2.5 shrink-0 opacity-70" aria-hidden />
                 </button>
               </Badge>
             ))}
-            <PopoverTrigger asChild>
-              <InputGroupButton
-                type="button"
-                size="icon-xs"
-                variant="ghost"
-                className="shrink-0 text-muted-foreground"
-                aria-expanded={filterPopoverOpen}
-              >
-                <FilterIcon className="size-4" />
-              </InputGroupButton>
-            </PopoverTrigger>
-          </InputGroupAddon>
+          </div>
           <PopoverContent
             align="end"
             className="w-auto max-w-md min-w-[min(100vw-2rem,20rem)] gap-0 p-0"
@@ -206,17 +231,23 @@ export default function SearchFilters({
               ))}
             </div>
             <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border px-4 py-2">
-              <Button type="button" variant="outline" size="icon-sm" onClick={clearAllFilters}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Clear filters"
+                onClick={clearAllFilters}
+              >
                 <XIcon className="size-4" />
               </Button>
-              <Button type="button" size="icon-sm" onClick={applyDraftFilters}>
+              <Button type="button" size="icon-sm" aria-label="Apply filters" onClick={applyDraftFilters}>
                 <CheckIcon className="size-4" />
               </Button>
             </div>
           </PopoverContent>
         </Popover>
-      ) : null}
-    </InputGroup>
+      )}
+    </div>
   )
 }
 

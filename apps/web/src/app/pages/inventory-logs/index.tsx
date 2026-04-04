@@ -3,7 +3,6 @@ import type { InventoryMovement } from '@/types/inventory-movement'
 import { DataTable } from '@/components/data-table'
 import { Badge } from '@/components/ui/badge'
 import { useGetPaginatedInventoryMovements } from '@/hooks/models/use-inventory-movement'
-import ViewInventoryMovement from './components/view-inventory-movement'
 
 export default function InventoryLogs() {
   const dataTable = {
@@ -16,6 +15,12 @@ export default function InventoryLogs() {
       {
         header: 'Item',
         accessorKey: 'transaction_item.item.name',
+      },
+      {
+        header: 'Unit',
+        accessorKey: 'transaction_item.item.unit.name',
+        cellFormat: ({ row }) =>
+          `${row.original.transaction_item.item.unit.name} (${row.original.transaction_item.item.unit.symbol})`,
       },
       {
         header: 'Quantity',
@@ -43,8 +48,8 @@ export default function InventoryLogs() {
         accessorKey: 'created_at',
       },
     ],
-    crud: {
-      view: ViewInventoryMovement,
+    filters: {
+      search: true,
     },
   } satisfies DataTableProps<InventoryMovement>
 

@@ -9,7 +9,6 @@ import ViewCategory from './components/view-category'
 export default function ManageCategories() {
   const dataTable = {
     query: useGetPaginatedCategories,
-    createActionLabel: 'Add category',
     columns: [
       {
         header: 'Name',
@@ -32,9 +31,14 @@ export default function ManageCategories() {
         isSortable: true,
       },
     ],
-    crud: {
-      view: ViewCategory,
+    filters: {
+      search: true,
+    },
+    tableActions: {
       create: CreateCategory,
+    },
+    rowActions: {
+      view: ViewCategory,
       update: UpdateCategory,
     },
   } satisfies DataTableProps<Category>

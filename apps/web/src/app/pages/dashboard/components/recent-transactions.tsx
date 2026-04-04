@@ -7,7 +7,6 @@ import { useGetPaginatedTransactions } from '@/hooks/models/use-transaction'
 export function RecentTransactions() {
   const dataTable = {
     query: useGetPaginatedTransactions,
-    createActionLabel: 'Add transaction',
     columns: [
       {
         header: 'Reference',
@@ -37,6 +36,7 @@ export function RecentTransactions() {
       },
     ],
     filters: {
+      search: true,
       type: TypeFilter,
     },
   } satisfies DataTableProps<Transaction>
