@@ -8,6 +8,7 @@ import ViewUnit from './components/view-unit'
 
 export default function ManageUnits() {
   const dataTable = {
+    title: 'Manage Units',
     query: useGetPaginatedUnits,
     columns: [
       {

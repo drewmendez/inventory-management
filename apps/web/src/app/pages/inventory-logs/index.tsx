@@ -6,6 +6,7 @@ import { useGetPaginatedInventoryMovements } from '@/hooks/models/use-inventory-
 
 export default function InventoryLogs() {
   const dataTable = {
+    title: 'Inventory Logs',
     query: useGetPaginatedInventoryMovements,
     columns: [
       {

@@ -8,6 +8,7 @@ import { useGetPaginatedItems } from '@/hooks/models/use-item'
 
 export function InventoryCounts() {
   const dataTable = {
+    title: 'Inventory Counts',
     query: useGetPaginatedItems,
     columns: [
       {

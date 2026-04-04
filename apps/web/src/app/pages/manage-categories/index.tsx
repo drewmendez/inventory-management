@@ -8,6 +8,7 @@ import ViewCategory from './components/view-category'
 
 export default function ManageCategories() {
   const dataTable = {
+    title: 'Manage Categories',
     query: useGetPaginatedCategories,
     columns: [
       {

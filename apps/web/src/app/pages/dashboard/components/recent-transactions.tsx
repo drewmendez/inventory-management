@@ -7,6 +7,7 @@ import { useGetPaginatedTransactions } from '@/hooks/models/use-transaction'
 
 export function RecentTransactions() {
   const dataTable = {
+    title: 'Recent Transactions',
     query: useGetPaginatedTransactions,
     columns: [
       {

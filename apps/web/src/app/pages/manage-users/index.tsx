@@ -8,6 +8,7 @@ import ViewUser from './components/view-user'
 
 export default function ManageUsers() {
   const dataTable = {
+    title: 'Manage Users',
     query: useGetPaginatedUsers,
     columns: [
       {

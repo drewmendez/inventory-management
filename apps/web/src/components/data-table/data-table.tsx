@@ -1,10 +1,10 @@
 import type { Column, ColumnDef, HeaderContext, SortingState } from '@tanstack/react-table'
 import type { DataTableProps } from '@/types/data-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon, RefreshCcwIcon } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, Edit, EyeIcon, PlusIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
@@ -21,7 +21,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
   const [createOpen, setCreateOpen] = useState(false)
 
   const primarySort = sorting[0]
-  const { data, refetch, isPending, isFetching } = dataTable.query({
+  const { data, isPending } = dataTable.query({
     page: pagination.pageIndex + 1,
     perPage: pagination.pageSize,
     sortBy: primarySort?.id,
@@ -105,6 +105,9 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
 
   return (
     <Card className="size-full gap-3">
+      <CardHeader>
+        <CardTitle className="text-xl">{dataTable.title}</CardTitle>
+      </CardHeader>
       <CardContent className="flex size-full min-h-0 flex-col gap-3">
         <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
           {filtersConfig && (
@@ -116,9 +119,6 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
             />
           )}
           <div className="ml-auto space-x-2">
-            <Button variant="info" size="icon-lg" onClick={() => refetch()}>
-              <RefreshCcwIcon className="size-4" />
-            </Button>
             {CreateAction && (
               <Button variant="success" size="icon-lg" onClick={() => setCreateOpen(true)}>
                 <PlusIcon className="size-4" />
@@ -147,7 +147,7 @@ export function DataTable<TData>({ dataTable }: { dataTable: DataTableProps<TDat
           </TableHeader>
 
           <TableBody>
-            {isPending || isFetching ? (
+            {isPending ? (
               Array.from({ length: pagination.pageSize }, (_, rowIndex) => (
                 <TableRow key={`skeleton-${rowIndex}`}>
                   {Array.from({ length: columnDefs.length }, (_, cellIndex) => (

@@ -12,6 +12,7 @@ import ViewItem from './components/view-item'
 
 export default function ItemInventories() {
   const dataTable = {
+    title: 'Item Inventories',
     query: useGetPaginatedItems,
     columns: [
       {

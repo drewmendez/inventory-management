@@ -161,7 +161,7 @@ export default function SearchFilters({
           placeholder="Search"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="max-w-md flex-1 py-5"
+          className="max-w-xs flex-1"
           aria-label="Search table"
         />
       )}
@@ -169,7 +169,7 @@ export default function SearchFilters({
         <Popover open={filterPopoverOpen} onOpenChange={handleFilterPopoverOpenChange}>
           <div
             className={cn(
-              'flex max-w-full flex-wrap items-center justify-start gap-1 rounded-md border border-border/60 px-1.5 py-1',
+              'flex max-w-full flex-wrap items-center justify-start gap-1 rounded-md border border-border/60 px-1 py-0.5',
               !showSearch && 'flex-1',
             )}
           >

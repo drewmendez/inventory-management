@@ -31,6 +31,7 @@ export type DataTableQueryHook<TData, TParams extends QueryParams = QueryParams>
 ) => UseQueryResult<TData, Error>
 
 export interface DataTableProps<TData, TParams extends QueryParams = QueryParams> {
+  title: string
   columns: Column<TData>[]
   query: DataTableQueryHook<PaginatedQueryResponse<TData>, TParams>
   tableActions?: {

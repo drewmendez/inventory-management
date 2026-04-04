@@ -9,6 +9,7 @@ import ViewTransaction from './components/view-transaction'
 
 export default function Transactions() {
   const dataTable = {
+    title: 'Transactions',
     query: useGetPaginatedTransactions,
     columns: [
       {
