@@ -77,7 +77,7 @@ class ItemService
     {
         $payload = array_intersect_key(
             $data,
-            array_flip(['name', 'quantity', 'reorder_level', 'category_id', 'unit_id'])
+            array_flip(['name', 'reorder_level', 'category_id', 'unit_id'])
         );
 
         if ($payload !== []) {

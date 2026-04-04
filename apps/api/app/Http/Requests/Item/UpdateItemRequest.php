@@ -21,11 +21,9 @@ class UpdateItemRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'quantity' => ['sometimes', 'numeric', 'min:0', 'decimal:0,2'],
             'reorder_level' => ['sometimes', 'required', 'numeric', 'min:0', 'decimal:0,2'],
             'category_id' => ['sometimes', 'required', 'integer', 'exists:categories,id'],
             'unit_id' => ['sometimes', 'required', 'integer', 'exists:units,id'],
         ];
     }
 }
-

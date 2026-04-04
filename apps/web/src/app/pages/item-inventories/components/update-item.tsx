@@ -1,6 +1,6 @@
 import type { Resolver } from 'react-hook-form'
 import type { DataTableRowModalProps } from '@/types/data-table'
-import type { Item, ItemFormValues, UpdateItemPayload } from '@/types/item'
+import type { Item, UpdateItemFormValues, UpdateItemPayload } from '@/types/item'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircleIcon } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -31,11 +31,14 @@ export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModa
   const units = unitsResult?.data ?? []
   const optionsReady = categories.length > 0 && units.length > 0
 
-  const { control, handleSubmit } = useForm<ItemFormValues, unknown, UpdateItemPayload>({
-    resolver: zodResolver(UpdateItemSchema as never) as Resolver<ItemFormValues, unknown, UpdateItemPayload>,
+  const { control, handleSubmit } = useForm<UpdateItemFormValues, unknown, UpdateItemPayload>({
+    resolver: zodResolver(UpdateItemSchema as never) as Resolver<
+      UpdateItemFormValues,
+      unknown,
+      UpdateItemPayload
+    >,
     defaultValues: {
       name: row.name,
-      quantity: row.quantity,
       reorder_level: row.reorder_level,
       category_id: row.category.id,
       unit_id: row.unit.id,
@@ -89,24 +92,6 @@ export default function UpdateItem({ row, open, onOpenChange }: DataTableRowModa
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="update-item-name">Name</FieldLabel>
                     <Input id="update-item-name" {...field} aria-invalid={fieldState.invalid} />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="quantity"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="update-item-quantity">Quantity</FieldLabel>
-                    <Input
-                      id="update-item-quantity"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                    />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}

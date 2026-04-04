@@ -50,9 +50,10 @@ export const CreateItemSchema = z.object({
   unit_id: z.number().int().positive(),
 })
 
-export const UpdateItemSchema = CreateItemSchema
+export const UpdateItemSchema = CreateItemSchema.omit({ quantity: true })
 export type ItemFormValues = z.input<typeof CreateItemSchema>
+export type UpdateItemFormValues = z.input<typeof UpdateItemSchema>
 export type CreateItemPayload = z.output<typeof CreateItemSchema>
 export type CreateItemFormData = ItemFormValues
-export type UpdateItemFormData = ItemFormValues
-export type UpdateItemPayload = CreateItemPayload
+export type UpdateItemFormData = UpdateItemFormValues
+export type UpdateItemPayload = z.output<typeof UpdateItemSchema>
