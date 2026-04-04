@@ -9,22 +9,28 @@ import {
 } from '@/components/ui/combobox'
 import { Skeleton } from '@/components/ui/skeleton'
 
-export type FilterItem = {
+export type ComboboxFilterItem = {
   id: string | number
   name: string
 }
 
-export interface FilterProps extends DataTableFilterProps {
-  items: FilterItem[]
+export interface ComboboxFilterProps extends DataTableFilterProps {
+  items: ComboboxFilterItem[]
   isLoading?: boolean
   placeholder: string
 }
 
-function itemIdString(item: FilterItem): string {
+function itemIdString(item: ComboboxFilterItem): string {
   return String(item.id)
 }
 
-export function Filter({ value, onValueChange, items, isLoading = false, placeholder }: FilterProps) {
+export function ComboboxFilter({
+  value,
+  onValueChange,
+  items,
+  isLoading = false,
+  placeholder,
+}: ComboboxFilterProps) {
   const selected = items.find((item) => itemIdString(item) === value) ?? null
 
   if (isLoading && items.length === 0) {
