@@ -5,6 +5,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 
 export function NavGroup({
@@ -20,6 +21,7 @@ export function NavGroup({
 }) {
   const { pathname } = useLocation()
   const isCurrentPath = (url: string) => pathname === url
+  const { setOpenMobile } = useSidebar()
 
   return (
     <SidebarGroup>
@@ -32,7 +34,7 @@ export function NavGroup({
               tooltip={item.title}
               className={isCurrentPath(item.url) ? 'bg-sidebar-accent' : ''}
             >
-              <Link to={item.url}>
+              <Link to={item.url} onClick={() => setOpenMobile(false)}>
                 {item.icon}
                 <span>{item.title}</span>
               </Link>
