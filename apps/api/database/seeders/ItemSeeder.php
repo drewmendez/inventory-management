@@ -56,7 +56,7 @@ class ItemSeeder extends Seeder
             ['sku' => 'CON-0002', 'name' => 'Hair Net',              'quantity' => 0.00, 'reorder_level' => 200.00, 'category' => 'CON', 'unit' => 'pc'],
 
             // CLN (Cleaning & Sanitation)
-            ['sku' => 'CLN-0001', 'name' => 'Dishwashing Liquid',    'quantity' => 8.00,  'reorder_level' => 3.00, 'category' => 'CLN', 'unit' => 'L'],
+            ['sku' => 'CLN-0001', 'name' => 'Dishwashing Liquid',    'quantity' => 0.00,  'reorder_level' => 3.00, 'category' => 'CLN', 'unit' => 'L'],
             ['sku' => 'CLN-0002', 'name' => 'Bleach',                'quantity' => 0.00,  'reorder_level' => 3.00, 'category' => 'CLN', 'unit' => 'L'],
         ];
 
