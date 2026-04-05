@@ -8,6 +8,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from '@/components/ui/combobox'
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -17,7 +25,6 @@ import {
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
 import { useGetCategories } from '@/hooks/models/use-category'
 import { useCreateItem } from '@/hooks/models/use-item'
@@ -43,8 +50,8 @@ function CreateItemForm({
       name: '',
       quantity: 0,
       reorder_level: 0,
-      category_id: categories[0]!.id,
-      unit_id: units[0]!.id,
+      category_id: 0,
+      unit_id: 0,
     },
   })
 
@@ -119,46 +126,76 @@ function CreateItemForm({
         <Controller
           name="category_id"
           control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Category</FieldLabel>
-              <Select value={String(field.value)} onValueChange={(v) => field.onChange(Number(v))}>
-                <SelectTrigger className="w-full" aria-invalid={fieldState.invalid}>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((c) => (
-                    <SelectItem key={c.id} value={String(c.id)}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
+          render={({ field, fieldState }) => {
+            const selected = categories.find((c) => c.id === field.value) ?? null
+            return (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Category</FieldLabel>
+                <Combobox
+                  items={categories}
+                  value={selected}
+                  onValueChange={(c: Category | null) => field.onChange(c?.id ?? 0)}
+                  itemToStringLabel={(c) => (c ? c.name : '')}
+                >
+                  <ComboboxInput
+                    placeholder="Select category"
+                    className="h-9 w-full py-1"
+                    showClear
+                    disabled={categories.length === 0}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <ComboboxContent>
+                    <ComboboxEmpty>No categories found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(c) => (
+                        <ComboboxItem key={c.id} value={c}>
+                          {c.name}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )
+          }}
         />
         <Controller
           name="unit_id"
           control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Unit</FieldLabel>
-              <Select value={String(field.value)} onValueChange={(v) => field.onChange(Number(v))}>
-                <SelectTrigger className="w-full" aria-invalid={fieldState.invalid}>
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {units.map((u) => (
-                    <SelectItem key={u.id} value={String(u.id)}>
-                      {u.name} ({u.symbol})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
+          render={({ field, fieldState }) => {
+            const selected = units.find((u) => u.id === field.value) ?? null
+            return (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Unit</FieldLabel>
+                <Combobox
+                  items={units}
+                  value={selected}
+                  onValueChange={(u: Unit | null) => field.onChange(u?.id ?? 0)}
+                  itemToStringLabel={(u) => (u ? `${u.name} (${u.symbol})` : '')}
+                >
+                  <ComboboxInput
+                    placeholder="Select unit"
+                    className="h-9 w-full py-1"
+                    showClear
+                    disabled={units.length === 0}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <ComboboxContent>
+                    <ComboboxEmpty>No units found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(u) => (
+                        <ComboboxItem key={u.id} value={u}>
+                          {u.name} <span className="text-muted-foreground">({u.symbol})</span>
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )
+          }}
         />
       </FieldGroup>
 

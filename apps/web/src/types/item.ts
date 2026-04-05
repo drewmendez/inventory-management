@@ -6,8 +6,8 @@ export const ItemFormSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(255),
   quantity: z.number().min(0),
   reorder_level: z.number().min(0),
-  category_id: z.number().int().positive(),
-  unit_id: z.number().int().positive(),
+  category_id: z.number().int().min(1, { message: 'Category is required' }),
+  unit_id: z.number().int().min(1, { message: 'Unit is required' }),
 })
 export const CreateItemFormSchema = ItemFormSchema
 export const UpdateItemFormSchema = ItemFormSchema.omit({ quantity: true })

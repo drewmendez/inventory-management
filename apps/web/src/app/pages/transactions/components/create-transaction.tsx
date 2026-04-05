@@ -86,7 +86,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
         onOpenChange(next)
       }}
     >
-      <DialogContent className="max-h-[min(90vh,44rem)] gap-4 overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="gap-4 overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>New transaction</DialogTitle>
           <DialogDescription>
@@ -165,110 +165,112 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
                 </Button>
               </div>
 
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-56">Item</TableHead>
-                    <TableHead className="w-32">Quantity</TableHead>
-                    <TableHead className="w-12 text-center"> </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {fields.map((fieldRow, index) => (
-                    <TableRow key={fieldRow.id}>
-                      <TableCell className="align-top">
-                        <Controller
-                          name={`transaction_items.${index}.item_id`}
-                          control={control}
-                          render={({ field, fieldState }) => {
-                            const takenElsewhere = new Set<number>()
-                            watchedLines?.forEach((line, i) => {
-                              if (i !== index && line && line.item_id > 0) {
-                                takenElsewhere.add(line.item_id)
-                              }
-                            })
-                            const lineItems = items.filter(
-                              (item) => !takenElsewhere.has(item.id) || item.id === field.value,
-                            )
-                            const selected = lineItems.find((i) => i.id === field.value) ?? null
-                            return (
+              <div className="max-h-[250px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="sticky top-0 z-10">
+                      <TableHead className="h-11 min-w-56 bg-primary text-primary-foreground">Item</TableHead>
+                      <TableHead className="h-11 w-32 bg-primary text-primary-foreground">Quantity</TableHead>
+                      <TableHead className="h-11 w-12 bg-primary text-center text-primary-foreground"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {fields.map((fieldRow, index) => (
+                      <TableRow key={fieldRow.id}>
+                        <TableCell className="align-top">
+                          <Controller
+                            name={`transaction_items.${index}.item_id`}
+                            control={control}
+                            render={({ field, fieldState }) => {
+                              const takenElsewhere = new Set<number>()
+                              watchedLines?.forEach((line, i) => {
+                                if (i !== index && line && line.item_id > 0) {
+                                  takenElsewhere.add(line.item_id)
+                                }
+                              })
+                              const lineItems = items.filter(
+                                (item) => !takenElsewhere.has(item.id) || item.id === field.value,
+                              )
+                              const selected = lineItems.find((i) => i.id === field.value) ?? null
+                              return (
+                                <Field data-invalid={fieldState.invalid} className="gap-1">
+                                  <Combobox
+                                    items={lineItems}
+                                    value={selected}
+                                    onValueChange={(item: Item | null) => field.onChange(item?.id ?? 0)}
+                                    itemToStringLabel={(i) => (i ? `${i.sku} — ${i.name}` : '')}
+                                  >
+                                    <ComboboxInput
+                                      placeholder="Search item"
+                                      className="h-9 py-1"
+                                      showClear
+                                      disabled={items.length === 0}
+                                    />
+                                    <ComboboxContent>
+                                      <ComboboxEmpty>No items found.</ComboboxEmpty>
+                                      <ComboboxList>
+                                        {(item) => (
+                                          <ComboboxItem key={item.id} value={item}>
+                                            <span className="font-mono text-xs">{item.sku}</span>
+                                            <span className="text-muted-foreground"> — {item.name}</span>
+                                          </ComboboxItem>
+                                        )}
+                                      </ComboboxList>
+                                    </ComboboxContent>
+                                  </Combobox>
+                                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                              )
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell className="align-top">
+                          <Controller
+                            name={`transaction_items.${index}.quantity`}
+                            control={control}
+                            render={({ field, fieldState }) => (
                               <Field data-invalid={fieldState.invalid} className="gap-1">
-                                <Combobox
-                                  items={lineItems}
-                                  value={selected}
-                                  onValueChange={(item: Item | null) => field.onChange(item?.id ?? 0)}
-                                  itemToStringLabel={(i) => (i ? `${i.sku} — ${i.name}` : '')}
-                                >
-                                  <ComboboxInput
-                                    placeholder="Search item"
-                                    className="h-9 py-1"
-                                    showClear
-                                    disabled={items.length === 0}
-                                  />
-                                  <ComboboxContent>
-                                    <ComboboxEmpty>No items found.</ComboboxEmpty>
-                                    <ComboboxList>
-                                      {(item) => (
-                                        <ComboboxItem key={item.id} value={item}>
-                                          <span className="font-mono text-xs">{item.sku}</span>
-                                          <span className="text-muted-foreground"> — {item.name}</span>
-                                        </ComboboxItem>
-                                      )}
-                                    </ComboboxList>
-                                  </ComboboxContent>
-                                </Combobox>
+                                <Input
+                                  type="number"
+                                  inputMode="decimal"
+                                  autoComplete="off"
+                                  className="h-9"
+                                  name={field.name}
+                                  ref={field.ref}
+                                  onBlur={field.onBlur}
+                                  value={Number.isFinite(field.value) ? String(field.value) : ''}
+                                  onChange={(e) => {
+                                    const v = e.target.value
+                                    field.onChange(v === '' ? 0 : Number.parseFloat(v))
+                                  }}
+                                  aria-invalid={fieldState.invalid}
+                                />
                                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                               </Field>
-                            )
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell className="align-top">
-                        <Controller
-                          name={`transaction_items.${index}.quantity`}
-                          control={control}
-                          render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid} className="gap-1">
-                              <Input
-                                type="number"
-                                inputMode="decimal"
-                                autoComplete="off"
-                                className="h-9"
-                                name={field.name}
-                                ref={field.ref}
-                                onBlur={field.onBlur}
-                                value={Number.isFinite(field.value) ? String(field.value) : ''}
-                                onChange={(e) => {
-                                  const v = e.target.value
-                                  field.onChange(v === '' ? 0 : Number.parseFloat(v))
-                                }}
-                                aria-invalid={fieldState.invalid}
-                              />
-                              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                            </Field>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell className="text-center align-top">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="size-9 text-muted-foreground hover:text-destructive"
-                          aria-label="Remove line"
-                          disabled={fields.length <= 1}
-                          onClick={() => remove(index)}
-                        >
-                          <Trash2Icon className="size-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell className="text-center align-top">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-9 text-muted-foreground hover:text-destructive"
+                            aria-label="Remove line"
+                            disabled={fields.length <= 1}
+                            onClick={() => remove(index)}
+                          >
+                            <Trash2Icon className="size-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="gap-2">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>

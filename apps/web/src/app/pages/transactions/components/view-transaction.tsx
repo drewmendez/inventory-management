@@ -25,21 +25,21 @@ export default function ViewTransaction({ row, open, onOpenChange }: DataTableRo
         </DialogHeader>
 
         <div className="grid gap-4">
-          <Field label="Remarks" value={row.remarks?.trim() ? row.remarks : '—'} />
-          <Field label="Recorded by" value={`${row.user.full_name} (${row.user.email})`} />
-          <Field label="Role" value={row.user.role.name} />
+          <Field label="Remarks" value={row.remarks?.trim() ? row.remarks : 'No remarks'} />
+          <Field label="Recorded by" value={row.user.full_name} />
           <Field label="Created" value={row.created_at} />
-          <Field label="Updated" value={row.updated_at} />
         </div>
 
-        <div className="grid gap-2">
-          <div className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Line items</div>
+        <div className="-mb-3 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+          Line items
+        </div>
+        <div className="max-h-[200px]">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>SKU</TableHead>
-                <TableHead>Item</TableHead>
-                <TableHead className="text-right">Qty</TableHead>
+              <TableRow className="sticky top-0 z-10">
+                <TableHead className="h-9 bg-primary text-primary-foreground">SKU</TableHead>
+                <TableHead className="h-9 bg-primary text-primary-foreground">Item</TableHead>
+                <TableHead className="h-9 bg-primary text-center text-primary-foreground">Qty</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -47,7 +47,7 @@ export default function ViewTransaction({ row, open, onOpenChange }: DataTableRo
                 <TableRow key={line.id}>
                   <TableCell className="font-mono text-xs">{line.item.sku}</TableCell>
                   <TableCell>{line.item.name}</TableCell>
-                  <TableCell className="text-right tabular-nums">{line.quantity}</TableCell>
+                  <TableCell className="text-center tabular-nums">{line.quantity}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
