@@ -32,7 +32,7 @@ class ItemService
             $direction = $filters['sort_order'] ?? 'asc';
             $query->orderBy($filters['sort_by'], $direction);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('updated_at', 'desc');
         }
 
         if (isset($filters['category_id'])) {
