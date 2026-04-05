@@ -78,7 +78,7 @@ function CreateItemForm({
           control={control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="create-item-quantity">Quantity</FieldLabel>
+              <FieldLabel htmlFor="create-item-quantity">Initial quantity</FieldLabel>
               <Input
                 id="create-item-quantity"
                 type="number"
