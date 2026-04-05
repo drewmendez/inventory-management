@@ -8,7 +8,10 @@ const TransactionLineFormSchema = z.object({
 })
 
 export const TransactionFormSchema = z.object({
-  type: z.union([z.literal(1), z.literal(2)]),
+  type: z
+    .number()
+    .int()
+    .refine((v) => v === 1 || v === 2, { message: 'Select a transaction type' }),
   remarks: z.string().max(1000),
   transaction_items: z.array(TransactionLineFormSchema).min(1, 'Add at least one line'),
 })

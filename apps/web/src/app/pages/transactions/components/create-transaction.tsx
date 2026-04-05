@@ -45,7 +45,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
   const { control, handleSubmit, reset } = useForm<CreateTransactionFormData>({
     resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
-      type: 1,
+      type: 0,
       remarks: '',
       transaction_items: [defaultLine()],
     },
@@ -63,7 +63,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
       onSuccess: () => {
         onOpenChange(false)
         reset({
-          type: 1,
+          type: 0,
           remarks: '',
           transaction_items: [defaultLine()],
         })
@@ -78,7 +78,7 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
         resetMutation()
         if (!next) {
           reset({
-            type: 1,
+            type: 0,
             remarks: '',
             transaction_items: [defaultLine()],
           })
@@ -116,11 +116,11 @@ export default function CreateTransaction({ open, onOpenChange }: DataTableModal
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel>Type</FieldLabel>
                     <Select
-                      value={String(field.value)}
+                      value={field.value === 0 ? undefined : String(field.value)}
                       onValueChange={(v) => field.onChange(Number(v) as 1 | 2)}
                     >
                       <SelectTrigger className="w-full max-w-xs" aria-invalid={fieldState.invalid}>
-                        <SelectValue />
+                        <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="1">Stock In</SelectItem>
