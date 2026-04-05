@@ -2,8 +2,6 @@
 
 Monorepo for an inventory management system: a **Laravel 12** JSON API with **Laravel Sanctum** (SPA / cookie authentication) and a **React + Vite** single-page application. Warehouse staff manage items and stock transactions; administrators manage users, categories, and units.
 
-**Demo / screen recordings:** see **[DEMO.md](DEMO.md)** (index of everything under `docs/`).
-
 ---
 
 ## System architecture
