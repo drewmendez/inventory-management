@@ -1,6 +1,7 @@
 import type { QueryParams } from '@/types/api'
 import type { CreateUnitFormData, UpdateUnitFormData } from '@/types/unit'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { buildQueryString } from '@/lib/utils'
 import { createUnit, getPaginatedUnits, getUnits, updateUnit } from '@/services/unit'
 
@@ -41,6 +42,7 @@ export const useCreateUnit = () => {
     mutationFn: (data: CreateUnitFormData) => createUnit(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['units'] })
+      toast.success('Unit created successfully', { position: 'top-center' })
     },
   })
 }
@@ -52,6 +54,7 @@ export const useUpdateUnit = () => {
     mutationFn: ({ unitId, data }: { unitId: number; data: UpdateUnitFormData }) => updateUnit(unitId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['units'] })
+      toast.success('Unit updated successfully', { position: 'top-center' })
     },
   })
 }

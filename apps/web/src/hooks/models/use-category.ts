@@ -1,6 +1,7 @@
 import type { QueryParams } from '@/types/api'
 import type { CreateCategoryFormData, UpdateCategoryFormData } from '@/types/category'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { buildQueryString } from '@/lib/utils'
 import { createCategory, getCategories, getPaginatedCategories, updateCategory } from '@/services/category'
 
@@ -41,6 +42,7 @@ export const useCreateCategory = () => {
     mutationFn: (data: CreateCategoryFormData) => createCategory(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['categories'] })
+      toast.success('Category created successfully', { position: 'top-center' })
     },
   })
 }
@@ -53,6 +55,7 @@ export const useUpdateCategory = () => {
       updateCategory(categoryId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['categories'] })
+      toast.success('Category updated successfully', { position: 'top-center' })
     },
   })
 }

@@ -1,6 +1,7 @@
 import type { QueryParams } from '@/types/api'
 import type { CreateTransactionFormData } from '@/types/transaction'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { buildQueryString } from '@/lib/utils'
 import { createTransaction, getPaginatedTransactions, getTransactions } from '@/services/transaction'
 
@@ -43,6 +44,7 @@ export const useCreateTransaction = () => {
       void queryClient.invalidateQueries({ queryKey: ['transactions'] })
       void queryClient.invalidateQueries({ queryKey: ['items'] })
       void queryClient.invalidateQueries({ queryKey: ['inventory-movements'] })
+      toast.success('Transaction created successfully', { position: 'top-center' })
     },
   })
 }

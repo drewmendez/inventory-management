@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/context/auth'
 import { ThemeProvider } from '@/context/theme'
@@ -11,6 +12,7 @@ export default function AppProvider({ children }: { children: React.ReactNode })
       <ThemeProvider>
         <AuthProvider>
           <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

@@ -1,6 +1,7 @@
 import type { QueryParams } from '@/types/api'
 import type { UpdateUserFormData } from '@/types/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { buildQueryString } from '@/lib/utils'
 import { getPaginatedUsers, getUsers, updateUser } from '@/services/user'
 
@@ -41,6 +42,7 @@ export const useUpdateUser = () => {
     mutationFn: ({ userId, data }: { userId: number; data: UpdateUserFormData }) => updateUser(userId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['users'] })
+      toast.success('User updated successfully', { position: 'top-center' })
     },
   })
 }

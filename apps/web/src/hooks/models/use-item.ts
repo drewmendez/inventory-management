@@ -1,6 +1,7 @@
 import type { QueryParams } from '@/types/api'
 import type { CreateItemFormData, UpdateItemFormData } from '@/types/item'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { buildQueryString } from '@/lib/utils'
 import { createItem, getItems, getPaginatedItems, updateItem } from '@/services/item'
 
@@ -50,6 +51,7 @@ export const useCreateItem = () => {
     mutationFn: (data: CreateItemFormData) => createItem(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['items'] })
+      toast.success('Item created successfully', { position: 'top-center' })
     },
   })
 }
@@ -61,6 +63,7 @@ export const useUpdateItem = () => {
     mutationFn: ({ itemId, data }: { itemId: number; data: UpdateItemFormData }) => updateItem(itemId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['items'] })
+      toast.success('Item updated successfully', { position: 'top-center' })
     },
   })
 }
