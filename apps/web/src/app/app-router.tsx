@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
+import AdminLayout from '@/app/layouts/admin-layout'
 import AuthLayout from '@/app/layouts/auth-layout'
 import MainLayout from '@/app/layouts/main-layout'
 import Dashboard from '@/app/pages/dashboard'
@@ -8,6 +9,7 @@ import Login from '@/app/pages/login'
 import ManageCategories from '@/app/pages/manage-categories'
 import ManageUnits from '@/app/pages/manage-units'
 import ManageUsers from '@/app/pages/manage-users'
+import NotFound from '@/app/pages/not-found'
 import Transactions from '@/app/pages/transactions'
 
 const router = createBrowserRouter([
@@ -16,23 +18,32 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    element: <AuthLayout />,
+    element: (
+      <AuthLayout>
+        <MainLayout />
+      </AuthLayout>
+    ),
     children: [
       {
-        element: <MainLayout />,
+        path: '/dashboard',
+        element: <Dashboard />,
+      },
+      {
+        path: '/dashboard/item-inventories',
+        element: <ItemInventories />,
+      },
+      {
+        path: '/dashboard/transactions',
+        element: <Transactions />,
+      },
+      {
+        path: '/dashboard/inventory-logs',
+        element: <InventoryLogs />,
+      },
+
+      {
+        element: <AdminLayout />,
         children: [
-          {
-            path: '/dashboard',
-            element: <Dashboard />,
-          },
-          {
-            path: '/dashboard/inventory-logs',
-            element: <InventoryLogs />,
-          },
-          {
-            path: '/dashboard/item-inventories',
-            element: <ItemInventories />,
-          },
           {
             path: '/dashboard/manage-categories',
             element: <ManageCategories />,
@@ -45,13 +56,13 @@ const router = createBrowserRouter([
             path: '/dashboard/manage-users',
             element: <ManageUsers />,
           },
-          {
-            path: '/dashboard/transactions',
-            element: <Transactions />,
-          },
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])
 
