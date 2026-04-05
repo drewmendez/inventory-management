@@ -7,6 +7,7 @@ use App\Http\Requests\Item\IndexItemRequest;
 use App\Http\Requests\Item\StoreItemRequest;
 use App\Http\Requests\Item\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
+use App\Models\Item;
 use App\Services\ItemService;
 use Illuminate\Http\JsonResponse;
 
@@ -38,29 +39,13 @@ class ItemController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateItemRequest $request, \App\Models\Item $item): JsonResponse
+    public function update(UpdateItemRequest $request, Item $item): JsonResponse
     {
         $item = $this->itemService->updateItem($item, $request->validated());
         $item->load(['category', 'unit']);
 
         return ItemResource::make($item)->response();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

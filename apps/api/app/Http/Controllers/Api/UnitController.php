@@ -38,14 +38,6 @@ class UnitController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateUnitRequest $request, Unit $unit): JsonResponse
@@ -53,13 +45,5 @@ class UnitController extends Controller
         $unit = $this->unitService->updateUnit($unit, $request->validated());
 
         return UnitResource::make($unit)->response();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
